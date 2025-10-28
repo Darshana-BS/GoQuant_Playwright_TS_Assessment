@@ -1,0 +1,19 @@
+{
+  "name": "gq_assessment_report",
+  "version": "1.0.0",
+  "description": "This automation framework validates the GoQuant platform workflows including account add, account management, order placement, API validations, and UI testing, Cross Browser Testing. ------------------------------------------------------------------------------",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "fs-extra": "^11.3.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,658 +1,283 @@
-const fs = require('fs-extra');
-const { execSync } = require('child_process');
-const path = require('path');
-
-
+"use strict";
+// @ts-nocheck
+Object.defineProperty(exports, "__esModule", { value: true });
+var fs_extra_1 = require("fs-extra");
+var child_process_1 = require("child_process");
+var path_1 = require("path");
 // ---- Extract test results from Playwright JSON ----
 function extractPlaywrightResults() {
-  const resultsPath = path.join(__dirname, '../test-results/results.json');
-  if (!fs.existsSync(resultsPath)) {
-    console.warn('⚠️ No test results found at', resultsPath);
-    return { summary: 'No results found', table: '| Test | Status | Duration (ms) |' };
-  }
-
-  const data = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
-  const tests = [];
-
-  function walkSuites(suites = []) {
-    for (const suite of suites) {
-      if (suite.tests) {
-        suite.tests.forEach(test => {
-          tests.push({
-            name: test.title,
-            status: test.outcome || test.status || 'unknown',
-            duration: test.duration || 0
-          });
-        });
-      }
-      if (suite.suites) walkSuites(suite.suites);
+    var resultsPath = path_1.default.join(__dirname, '../test-results/results.json');
+    if (!fs_extra_1.default.existsSync(resultsPath)) {
+        console.warn('⚠️ No test results found at', resultsPath);
+        return { summary: 'No results found', table: '| Test | Status | Duration (ms) |' };
     }
-  }
-
-  walkSuites(data.suites || []);
-
-  const total = tests.length;
-  const passed = tests.filter(t => t.status === 'passed').length;
-  const failed = tests.filter(t => t.status === 'failed').length;
-  const skipped = tests.filter(t => t.status === 'skipped').length;
-
-  const summary = `**Total:** ${total} ✅ **Passed:** ${passed} ❌ **Failed:** ${failed} ⚪ **Skipped:** ${skipped}`;
-  const table =
-    '| Test | Status | Duration (ms) |\n|------|---------|---------------|\n' +
-    tests
-      .map(
-        t =>
-          `| ${t.name} | ${
-            t.status === 'passed'
-              ? '✅ Passed'
-              : t.status === 'failed'
-              ? '❌ Failed'
-              : '⚪ Skipped'
-          } | ${t.duration} |`
-      )
-      .join('\n');
-
-  return { summary, table };
+    var data = JSON.parse(fs_extra_1.default.readFileSync(resultsPath, 'utf8'));
+    var tests = [];
+    function walkSuites(suites) {
+        if (suites === void 0) { suites = []; }
+        for (var _i = 0, suites_1 = suites; _i < suites_1.length; _i++) {
+            var suite = suites_1[_i];
+            if (suite.tests) {
+                suite.tests.forEach(function (test) {
+                    tests.push({
+                        name: test.title,
+                        status: test.outcome || test.status || 'unknown',
+                        duration: test.duration || 0
+                    });
+                });
+            }
+            if (suite.suites)
+                walkSuites(suite.suites);
+        }
+    }
+    walkSuites(data.suites || []);
+    var total = tests.length;
+    var passed = tests.filter(function (t) { return t.status === 'passed'; }).length;
+    var failed = tests.filter(function (t) { return t.status === 'failed'; }).length;
+    var skipped = tests.filter(function (t) { return t.status === 'skipped'; }).length;
+    var summary = "**Total:** ".concat(total, "\u2003\u2705 **Passed:** ").concat(passed, "\u2003\u274C **Failed:** ").concat(failed, "\u2003\u26AA **Skipped:** ").concat(skipped);
+    var table = '| Test | Status | Duration (ms) |\n|------|---------|---------------|\n' +
+        tests
+            .map(function (t) {
+            return "| ".concat(t.name, " | ").concat(t.status === 'passed'
+                ? '✅ Passed'
+                : t.status === 'failed'
+                    ? '❌ Failed'
+                    : '⚪ Skipped', " | ").concat(t.duration, " |");
+        })
+            .join('\n');
+    return { summary: summary, table: table };
 }
-
-const REPORT_FOLDER = 'GQ_Assessment_Report';
-const MD5_FILE = `${REPORT_FOLDER}/md5_report.txt`;
-const README_FILE = 'README.md';
-
+var REPORT_FOLDER = 'GQ_Assessment_Report';
+var MD5_FILE = "".concat(REPORT_FOLDER, "/md5_report.txt");
+var README_FILE = 'README.md';
 // Ensure report folder exists
-fs.ensureDirSync(REPORT_FOLDER);
-
+fs_extra_1.default.ensureDirSync(REPORT_FOLDER);
 // Step 1: Generate MD5 checksums
 console.log('Generating MD5 checksums...');
-execSync(`> ${MD5_FILE}`);
-execSync(`find . -type f ! -path "*/.*" | while read file; do md5 -r "$file" >> ${MD5_FILE}; done`);
+(0, child_process_1.execSync)("> ".concat(MD5_FILE));
+(0, child_process_1.execSync)("find . -type f ! -path \"*/.*\" | while read file; do md5 -r \"$file\" >> ".concat(MD5_FILE, "; done"));
 console.log('MD5 report saved at', MD5_FILE);
-
 // Step 2: Prepare MD5 summary table (top 10 files)
-const md5Lines = fs.readFileSync(MD5_FILE, 'utf8').split('\n').filter(Boolean);
-const md5Table = md5Lines.slice(0, 10).map(line => {
-  const [hash, file] = line.split(' ');
-  return `| ${hash} | ${file || ''} |`;
+var md5Lines = fs_extra_1.default.readFileSync(MD5_FILE, 'utf8').split('\n').filter(Boolean);
+var md5Table = md5Lines.slice(0, 10).map(function (line) {
+    var _a = line.split(' '), hash = _a[0], file = _a[1];
+    return "| ".concat(hash, " | ").concat(file || '', " |");
 }).join('\n');
-
 // Step 3: Prepare Playwright test summary dynamically
-const PLAYWRIGHT_REPORT_JSON = path.join(REPORT_FOLDER, 'playwright-report', 'report.json');
-
-let testSummary = '| Test Case | Status |\n|-----------|--------|\n';
-if (fs.existsSync(PLAYWRIGHT_REPORT_JSON)) {
-  const reportData = fs.readJSONSync(PLAYWRIGHT_REPORT_JSON);
-
-  reportData.suites.forEach(suite => {
-    suite.specs.forEach(spec => {
-      spec.tests.forEach(test => {
-        const status = test.results.every(r => r.status === 'passed') ? '✅ Passed' : '❌ Failed';
-        testSummary += `| ${test.title} | ${status} |\n`;
-      });
+var PLAYWRIGHT_REPORT_JSON = path_1.default.join(REPORT_FOLDER, 'playwright-report', 'report.json');
+var testSummary = '| Test Case | Status |\n|-----------|--------|\n';
+if (fs_extra_1.default.existsSync(PLAYWRIGHT_REPORT_JSON)) {
+    var reportData = fs_extra_1.default.readJSONSync(PLAYWRIGHT_REPORT_JSON);
+    reportData.suites.forEach(function (suite) {
+        suite.specs.forEach(function (spec) {
+            spec.tests.forEach(function (test) {
+                var status = test.results.every(function (r) { return r.status === 'passed'; }) ? '✅ Passed' : '❌ Failed';
+                testSummary += "| ".concat(test.title, " | ").concat(status, " |\n");
+            });
+        });
     });
-  });
-} else {
-  testSummary += '| No tests found | - |\n';
 }
-if (fs.existsSync(PLAYWRIGHT_REPORT_JSON)) {
-  const reportData = fs.readJSONSync(PLAYWRIGHT_REPORT_JSON);
-  reportData.suites.forEach(suite => {
-    suite.specs.forEach(spec => {
-      spec.tests.forEach(test => {
-        const status = test.results.every(r => r.status === 'passed') ? 'Passed' : 'Failed';
-        testSummary += `| ${spec.file} | ${status} |\n`;
-      });
+else {
+    testSummary += '| No tests found | - |\n';
+}
+if (fs_extra_1.default.existsSync(PLAYWRIGHT_REPORT_JSON)) {
+    var reportData = fs_extra_1.default.readJSONSync(PLAYWRIGHT_REPORT_JSON);
+    reportData.suites.forEach(function (suite) {
+        suite.specs.forEach(function (spec) {
+            spec.tests.forEach(function (test) {
+                var status = test.results.every(function (r) { return r.status === 'passed'; }) ? 'Passed' : 'Failed';
+                testSummary += "| ".concat(spec.file, " | ").concat(status, " |\n");
+            });
+        });
     });
-  });
-} else {
-  testSummary += '| goQuant_cases.spec.js | See HTML report |\n';
 }
-
+else {
+    testSummary += '| goQuant_cases.spec.js | See HTML report |\n';
+}
 // Define credentials before the template starts
-const credentials = "Generated by Darshana Nehulkar | QA Automation";
-
+var credentials = "Generated by Darshana Nehulkar | QA Automation";
 // --------------- TRACE EVIDENCE SECTION ----------------
-const evidenceSection = `
-## 🎥 Test Execution Evidence
-
-## 🎥 Test Execution Evidence for Structured cases trace
-| #  | Test Case | Trace File | GitHub Link |
-|--- |------------|-------------|-------------|
-| 01 | Login with Invalid Credentials     | TC01_LoginInvalid_Creds.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC01_LoginInvalid_Creds.zip) |
-| 02 | Login with Valid Credentials       | TC02_LoginValid_Creds.zip   | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC02_LoginValid_Creds.zip) |
-| 03 | Add OKX Account                    | TC03_Add_Account_OKX.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC03_Add_Account_OKX.zip) |
-| 04 | Add Binance USDM Account           | TC04_Add_Account_Binance_COINM.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC04_Add_Account_Binance_COINM.zip) |
-| 04 | Add Binance COINM Account          | TC04_Add_Account_Binance_USDM.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC04_Add_Account_Binance_USDM.zip) |
-| 05 | Modify Account with invalid details| TC05_Modify_Account_ivalid_details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC05_Modify_Account_ivalid_details.zip) |
-| 06 | Place Order Binance COINM          | TC06_Place_Binance_COINM_Order.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC06_Place_Binance_COINM_Order.zip) |
-| 06 | Place Order Binance USDM           | TC06_Place_Binance_USDM_Order.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC06_Place_Binance_USDM_Order.zip) |
-| 06 | Place Order OKX                    | TC06_Place_OKX_Market_Order.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC06_Place_OKX_Market_Order.zip) |
-| 08 | Order Emptyr values Validation     | TC08_order_place_validation_errors.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC08_order_place_validation_errors.zip) |
-| 09 | Validate Metrics.                  | TC09_validate_metrics.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC09_validate_metrics.zip) |
-| 11 | Cancel All Working Orders          | TC11_cancelall_workingorders.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC11_cancelall_workingorders.zip) |
-| 12 | Kill Edge                          | TC12_kill-edge.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC12_kill-edge.zip) |
-| 13 | Liquidate Positions                | TC13_Liquidate_Positions.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC13_Liquidate_Positions.zip) |
-| 14 | Switch to smart ordering           | TC14_Smart_order_routing.zip | [View Trace]https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC14_Smart_order_routing.zip) |
-| 17 | Add account using invalid details  | TC17_Add_Invalid_Account.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC17_Add_Invalid_Account.zip) |
-| 20 | Logout user                        | TC20_Logout.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC20_Logout.zip) |
-| 21 | Modify Account using valid details | TC21_Modify_Account_valid_details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC21_Modify_Account_valid_details.zip) |
-| 22 | Login fields validations           | TC22_Login_with_black_email_password.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC22_Login_with_black_email_password.zip) |
-
-## 🎥 Test Execution Evidence for non structured cases (Old)
-Each test case has its own individual **Playwright trace recording** uploaded to GitHub.  
-These traces include full steps, network logs, screenshots, and console logs for debugging.
-| # | Test Case | Trace File | GitHub Link |
-|---|------------|-------------|-------------|
-| 01 | Login with Invalid Credentials | TC01_LoginInvalid_Creds.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC01_LoginInvalid_Creds.zip) |
-| 02 | Login with Valid Credentials | TC02_LoginValid_Creds.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC02_LoginValid_Creds.zip) |
-| 03 | Add Account | TC03_Add_Account.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC03_Add_Account.zip) |
-| 04 | Delete Account | TC04_Delete_Account.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC04_Delete_Account.zip) |
-| 05 | Modify Account (Invalid Details) | TC05_Modify_Account_Invalid_Details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC05_Modify_Account_Invalid_Details.zip) |
-| 06 | Place OKX Market Order | TC06_Place_OKX_Market_Order.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC06_Place_OKX_Market_Order.zip) |
-| 07 | Get Order Details | TC07_Get_Order_Details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC07_Get_Order_Details.zip) |
-| 08 | Validation Errors | TC08_Validation_Errors.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC08_Validation_Errors.zip) |
-| 09 | Validate Metrics | TC09_Validate_Metrics.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC09_Validate_Metrics.zip) |
-| 10 | Add & Clear Assets | TC10_AddClear_Assets.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC10_AddClear_Assets.zip) |
-| 11 | Cancel All Working Orders | TC11_CancelAll_WorkingOrders.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC11_CancelAll_WorkingOrders.zip) |
-| 12 | Kill Edge | TC12_Kill_Edge.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC12_Kill_Edge.zip) |
-| 13 | Liquidate Positions | TC13_Liquidate_Positions.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC13_Liquidate_Positions.zip) |
-| 14 | Smart Order Routing | TC14_Smart_Order_Routing.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC14_Smart_Order_Routing.zip) |
-| 20 | Logout | TC20_Logout.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC20_Logout.zip) |
-| 21 | Modify Account (Valid Details) | TC21_Modify_Account_Valid_Details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC21_Modify_Account_Valid_Details.zip) |
-
-> 🧩 **Note:** All traces are downloadable ZIPs and can be replayed using Playwright Trace Viewer.
-`;
-
+var evidenceSection = "\n## \uD83C\uDFA5 Test Execution Evidence\n\n## \uD83C\uDFA5 Test Execution Evidence for Structured cases trace\n| #  | Test Case | Trace File | GitHub Link |\n|--- |------------|-------------|-------------|\n| 01 | Login with Invalid Credentials     | TC01_LoginInvalid_Creds.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC01_LoginInvalid_Creds.zip) |\n| 02 | Login with Valid Credentials       | TC02_LoginValid_Creds.zip   | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC02_LoginValid_Creds.zip) |\n| 03 | Add OKX Account                    | TC03_Add_Account_OKX.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC03_Add_Account_OKX.zip) |\n| 04 | Add Binance USDM Account           | TC04_Add_Account_Binance_COINM.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC04_Add_Account_Binance_COINM.zip) |\n| 04 | Add Binance COINM Account          | TC04_Add_Account_Binance_USDM.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC04_Add_Account_Binance_USDM.zip) |\n| 05 | Modify Account with invalid details| TC05_Modify_Account_ivalid_details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC05_Modify_Account_ivalid_details.zip) |\n| 06 | Place Order Binance COINM          | TC06_Place_Binance_COINM_Order.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC06_Place_Binance_COINM_Order.zip) |\n| 06 | Place Order Binance USDM           | TC06_Place_Binance_USDM_Order.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC06_Place_Binance_USDM_Order.zip) |\n| 06 | Place Order OKX                    | TC06_Place_OKX_Market_Order.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC06_Place_OKX_Market_Order.zip) |\n| 08 | Order Emptyr values Validation     | TC08_order_place_validation_errors.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC08_order_place_validation_errors.zip) |\n| 09 | Validate Metrics.                  | TC09_validate_metrics.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC09_validate_metrics.zip) |\n| 11 | Cancel All Working Orders          | TC11_cancelall_workingorders.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC11_cancelall_workingorders.zip) |\n| 12 | Kill Edge                          | TC12_kill-edge.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC12_kill-edge.zip) |\n| 13 | Liquidate Positions                | TC13_Liquidate_Positions.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC13_Liquidate_Positions.zip) |\n| 14 | Switch to smart ordering           | TC14_Smart_order_routing.zip | [View Trace]https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC14_Smart_order_routing.zip) |\n| 17 | Add account using invalid details  | TC17_Add_Invalid_Account.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC17_Add_Invalid_Account.zip) |\n| 20 | Logout user                        | TC20_Logout.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC20_Logout.zip) |\n| 21 | Modify Account using valid details | TC21_Modify_Account_valid_details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC21_Modify_Account_valid_details.zip) |\n| 22 | Login fields validations           | TC22_Login_with_black_email_password.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/Restructured_cases/TC22_Login_with_black_email_password.zip) |\n\n## \uD83C\uDFA5 Test Execution Evidence for non structured cases (Old)\nEach test case has its own individual **Playwright trace recording** uploaded to GitHub.  \nThese traces include full steps, network logs, screenshots, and console logs for debugging.\n| # | Test Case | Trace File | GitHub Link |\n|---|------------|-------------|-------------|\n| 01 | Login with Invalid Credentials | TC01_LoginInvalid_Creds.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC01_LoginInvalid_Creds.zip) |\n| 02 | Login with Valid Credentials | TC02_LoginValid_Creds.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC02_LoginValid_Creds.zip) |\n| 03 | Add Account | TC03_Add_Account.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC03_Add_Account.zip) |\n| 04 | Delete Account | TC04_Delete_Account.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC04_Delete_Account.zip) |\n| 05 | Modify Account (Invalid Details) | TC05_Modify_Account_Invalid_Details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC05_Modify_Account_Invalid_Details.zip) |\n| 06 | Place OKX Market Order | TC06_Place_OKX_Market_Order.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC06_Place_OKX_Market_Order.zip) |\n| 07 | Get Order Details | TC07_Get_Order_Details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC07_Get_Order_Details.zip) |\n| 08 | Validation Errors | TC08_Validation_Errors.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC08_Validation_Errors.zip) |\n| 09 | Validate Metrics | TC09_Validate_Metrics.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC09_Validate_Metrics.zip) |\n| 10 | Add & Clear Assets | TC10_AddClear_Assets.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC10_AddClear_Assets.zip) |\n| 11 | Cancel All Working Orders | TC11_CancelAll_WorkingOrders.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC11_CancelAll_WorkingOrders.zip) |\n| 12 | Kill Edge | TC12_Kill_Edge.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC12_Kill_Edge.zip) |\n| 13 | Liquidate Positions | TC13_Liquidate_Positions.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC13_Liquidate_Positions.zip) |\n| 14 | Smart Order Routing | TC14_Smart_Order_Routing.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC14_Smart_Order_Routing.zip) |\n| 20 | Logout | TC20_Logout.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC20_Logout.zip) |\n| 21 | Modify Account (Valid Details) | TC21_Modify_Account_Valid_Details.zip | [View Trace](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/tests/trace/TC21_Modify_Account_Valid_Details.zip) |\n\n> \uD83E\uDDE9 **Note:** All traces are downloadable ZIPs and can be replayed using Playwright Trace Viewer.\n";
 // Step 4: Generate dynamic README content
-const readmeContent = `
-# GQ_Assessment Automation Framework
-
-# 1. Project Description
-This automation framework validates the GoQuant platform workflows including account add, account management, order placement, API validations, and UI testing, Cross Browser Testing.
-------------------------------------------------------------------------------
-
-# 2. 🧭 Executive Summary
-This report outlines the automated testing process performed on GoQuant’s GoTrade platform.  
-The tests covered functional, UI/UX, and edge case scenarios.  
-Overall, the platform demonstrated basic stability, with several functional and validation issues identified.
-------------------------------------------------------------------------------
-
-## 3. Technologies and Frameworks Used
-- **Programming Language:** JavaScript / Node.js  
-- **Automation Framework:** Playwright  
-- **Reporting Tools:** Playwright HTML Reporter, Markdown, PDF generation ('markdown-pdf')  
-- **Approach:** End-to-end automation using Page Object Model 
-- **Execution:** Manual + Automated API validations 
-- **Browsers:** Chromium, Firefox, Safari 
-- **Data Management:** Hardcoded credentials and test data files 
-- **Build Tools:** npm  
-- **Other Tools:** fs-extra (file system utilities), MD5 checksum verification  
-------------------------------------------------------------------------------
-
-## 4. Prerequisites
-- Node.js v18+
-- npm 
-- Playwright browsers installed
-- Git
-- Modern browser (Chromium, Firefox, Safari)
-------------------------------------------------------------------------------
-
-## 5. Installation
-\`\`\`
-git clone -b GQ_Assessment https://github.com/Darshana-BS/GQ_Assessment.git
-cd GQ_Assessment
-npm install
-npx playwright install
-\`\`\`
-------------------------------------------------------------------------------
-
-## 6. How to Run Tests
-\`\`\`
-# Run all tests
-npx playwright test --reporter=html
-npx playwright show-report
-
-# View Video recording trace 
-npx playwright show-trace trace/<.zip file name>
-ex. npx playwright show-trace trace/TC05_Modify\ Account.zip
-
-# Run specific test
-npx playwright test tests/goQuant_cases.spec.js
-
-# Run tests in headless mode 
-npx playwright test --headless 
-
-# Run tests in head mode 
-npx playwright test --headed  
-
-# Run tests to save /test-results/resultsjson results 
-npx playwright test --reporter=json,html --output=playwright-report > /Users/darsh_cf/Desktop/DN_cypress/GoQuant_Auto_Asse/test-results/results.json --project=chromium --headed
-npm run test:report 
-
-# Run test to copy report with date, time and to github automaticaly 
-"test:reportcopy": "npx playwright test --reporter=html && node copyReport.js"
-
-# Run cases and save browser specific results in <browser_name>_results 
-"test:chrome": "npx playwright test --project=chromium --reporter=html --output=chrome_results",
-"test:firefox": "npx playwright test --project=firefox --reporter=html --output=firefox_results",
-"test:safari": "npx playwright test --project=webkit --reporter=html --output=webkit_results",
-
-# Generate MD5 checksums
-mkdir -p GQ_Assessment_Report
-find . -type f ! -path "*/.*" -print0 | xargs -0 -I{} md5 -r {} > GQ_Assessment_Report/md5_report.txt 
-
-# Generate combined PDF report 
-node generateReport.js
-\`\`\`
-------------------------------------------------------------------------------
-
-# 7. Project Structure
-\`\`\`
-pages/                    # Page object models for UI interactions
-tests/                    # Playwright test scripts
-fixtures/                 # Test data and reusable assets
-GQ_Assessment_Report/     # Generated MD5, HTML, and PDF reports
-package.json              # Node.js project configuration
-generateReport.js         # Script to generate MD5 + Playwright PDF report
-playwright.config.js      # Configs for tests being executed
-\`\`\` 
-------------------------------------------------------------------------------
-
-## 8. Reporting and Results
-\`\`\`
-**Top 10 MD5 files:**
-MD5 Report: GQ_Assessment_Report/md5_report.txt — lists MD5 hashes of all project files for integrity check
-Playwright HTML Report: GQ_Assessment_Report/playwright-report/index.html — detailed pass/fail report for all test cases
-Combined PDF Report: GQ_Assessment_Report/Detailed_Report.pdf — single file containing project overview, MD5 summary, and test results
-| Hash | File |
-${md5Table}
-${credentials}
-\`\`\`
-------------------------------------------------------------------------------
-
-## 9. 🧪 Test Case Overview
-| Category   | Scenarios  | Tools Used |
-|----------- |------------|------------|
-| Functional | Login validation, Account creation, Account Modify, Account Delete, Place Order, Validate Account status, Get order details, Cancel Order API, Switch Views, Log out | Playwright |
-| UI/UX      | Page elements, modal handling, dropdowns | Playwright |
-| Edge Case  | \`/gotrade/v3/users\` | Playwright |
-| API        | \`/gotrade/v3/credentials\`, \`/gotrade/v3/cancel_all\` | Playwright APIRequest |
-
-*Total Tests: **22**  
-*Passed: **14**  
-*Failed (Expected): **2**
-------------------------------------------------------------------------------
-
-## 10 🧩 Challenges Faced
-- Dynamic IDs ('radix-*') made locators unstable.
-- Modal elements required explicit waits.
-- GitHub push blocked due to PAT (resolved by removing file and rewriting history).
-- Playwright Test did not expect test() to be called here (due to hat means you have nested playwright dependencies — 
-  usually happens if some other dependency also includes @playwright/test.)
-------------------------------------------------------------------------------
-
-## 11. Known Bugs / Notes
-- Update API sometimes returns 400 (handled)
-- Cancel Order API sometimes returns 422 (handled) 
-- Orders are placed but not displayed in the orders history (coult not automate, as there are no orders) 
-- Cancel single orders are not displayed due to order issue (could not automate, as there are no orders)
-
-### 🪲 Key Findings
-
-### 🔴 Critical
-| ID | Issue  | Expected vs Actual | Steps to Reproduce |
-|----|--------|--------------------|--------------------|
-| 1  | Orders are not displayed in the order history | Should display the orders placed successfully | Execute the place order api and validate orders |
-| 2  | API \`/gotrade/v3/cancel_all\`' response delayed | Should return < 200ms | Execute cancel API in test |
-
-### 🟡 Medium
-| ID | Issue  | Observation | Evidence  |
-|----|--------|-------------|-----------|
-| 3  | Modify Account is displaying incorrect message  | Modify account from Accounts and save | [Pending] Attached screenshot |
-| 4  | Metrics data total and assets column data is inconsistent | Metrics validate TC09_validation_Metrics_ | Check results summary |
-
-### 🟢 Low
-| ID | Issue  | Observation | Note |
-|----|--------|-------------|------|
-| 5  | Sometimes env abruptly lands on 'Something went wrong' | Execute case TC22[Edge_case]_Handle_Something_went_wrong | Environment Issue |
-| 6  | Try again on 'Something went wrong' screen is not functioning | Execute case TC22[Edge_case]_Handle_Something_went_wrong | Environment Issue |
-| 7  | APIs \`/v4/groups/all\`, \`/v3/set_margin_leverage\`, \`/v3/symbols/leverage-margin\`, \`/v3/current_leverage_margin\` | Failing with 400 Bad request | Navigate / Visit https://test1.gotrade.goquant.io/admin| 
-| 8  | APIs \`/v1/users\` | Failing with 500 Error | Navigate / Visit https://test1.gotrade.goquant.io/admin | 
-
-------------------------------------------------------------------------------
-
-## 12. 📈 Technical Analysis
-- **Average API response time:** 280ms  
-- **Browser coverage:** 3  
-- **Accessibility:** 
-- **Performance:** Stable under 5 concurrent actions 
-------------------------------------------------------------------------------
-
-## 13. 💡 Recommendations
-- Add stable 'data-testid' attributes for better element targeting.
-- Optimize API response time under 200ms.
-- Improve accessibility attributes (aria-labels, alt text).
-- Enhance error message consistency. 
-- Add a better UI handeling for the screen elements of the Add/Clear button (expected = dropdown to select % should stay until user clicks somwhere elese)
-------------------------------------------------------------------------------
-
-## 14. 📸 Evidence & Reports
-| 🧾 Type | 📁 Location | 🔗 Open / Notes |
-|----------|--------------|----------------|
-| 🧠 **HTML Test Report** | [GQ_Assessment_Report/playwright-report/index.html](./GQ_Assessment_Report/playwright-report/index.html) | ▶️ *View full Playwright test results* |
-| 🧠 **PDF Test Report | [GQ_Assessment_Report/GQ_Assessment_Report/Detailed_Report.md](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/GQ_Assessment_Report/GQ_Assessment_Report/Detailed_Report.md) | 🪄 *Backup local report location* |
-| 🧩 **Trace Files** | [tests/trace/Restructured_cases](https://github.com/Darshana-BS/GQ_Assessment/tree/GQ_Assessment/tests/trace/Restructured_cases) | 🔍 *Replay test steps in Playwright trace viewer* |
-| 🖼️ **Screenshots** | [reports/screenshots/](./reports/screenshots/) | 📸 *Pending upload / captured test images* | [Pending]
------------------------------------------------------------------------------- 
-
-## 15. 🧩 Test Organization
-All Playwright test cases are placed under the \`tests/\` directory.  
-Each module or functionality has its own \`.spec.js\` file for better organization.
-
-\`\`\`bash
-tests/
-├── account/
-│   ├── TC03_Add_Account_OKX.spec.js
-│   ├── TC04_Add_Account_Binance_COINM.spec.js
-│   ├── TC04_Add_Account_Binance_USDM.spec.js
-│   ├── TC05_Modify_Account_Invalid_details.spec.js
-│   ├── TC17_Add_Invalid_account.spec.js
-│   ├── TC18_Delete_Account.spec.js
-│   ├── TC19_Validate_Account_Status.spec.js
-│   ├── TC20_Modify_Account_Valid.spec.js
-│   └── TC21_Add_Account_Valid.spec.js
-
-├── auth/
-│   ├── TC01_LoginInvalid_Creds.spec.js
-│   ├── TC02_LoginValid_Creds.spec.js
-│   ├── TC20_Logout.spec.js
-│   └── TC22_Login_with_black_email_password.spec.js
-
-├── dashboard/
-│   ├── [Pending]_TC15_Switch_to_Order_book_Consolidated_view.spec.js
-│   ├── TC09_Validate_Metrics.spec.js
-│   ├── TC10_add_clear_assets.spec.js
-│   ├── TC12_Kill_Edge.spec.js
-│   ├── TC13_Liquidate_Positions.spec.js
-│   └── TC14_Switch_to_smart_order_routing.spec.js
-
-└── order/
-    ├── TC06_Place_Binance_COINM_order.spec.js
-    ├── TC06_Place_Binance_USDM_order.spec.js
-    ├── TC06_Place_OKX_Market_order_swap.spec.js
-    ├── TC08_Place_order_validations_with_empty_details.spec.js
-    ├── TC11_Cancel_All_Working_Orders.spec.js
-    └── TC16_Place_Short_Sell_order.spec.js
-\`\`\`
-
-All 22 Playwright test cases are structured across feature-based spec files:
-
-| Module                | Test Cases                    | Folder              |
-|-----------------------|-------------------------------|---------------------|
-| Authentication        | TC01 – TC02, TC20 - T20       | \`/tests/auth/\`    |
-| Account Management    | TC03 – TC05, TC17 - TC19, TC21| \`/tests/account/\` |
-| Order                 | TC06, TC08, TC11, TC16        | \`/tests/order/\`  |
-| Dashboard             | TC09 – TC10, TC12 - TC15      | \`/tests/api/\`     |
-
-This structure improves test readability, modularity, and maintainability.
-
-## 16. 🏷️ Tag-based Execution
-
-| Command                                      | Description                         |
-| ---------------------------------------------| ----------------------------------- |
-| \`npx playwright test --grep "@auth"\`       | Run only authentication tests       |
-| \`npx playwright test --grep "@account"\`    | Run only account-related tests      |
-| \`npx playwright test --grep "@order"\`      | Run only order tests                |
-| \`npx playwright test --grep "@dashboard"\`  | Run the full regression suite       |
-| \`npx playwright test --grep-invert "@order"\`| Run all UI tests excluding API ones |
-
-All Playwright tests are categorized with tags for selective execution:
-
-| Tag       | Description                              |
-|-----------|------------------------------------------|
-| @auth     | Login & authentication flows             |
-| @account  | Account creation, modification, deletion |
-| @order    | Order placement & validation             |
-| @dashboard| API endpoint validation                  |
-| @logout   | Logout functionality                     |
-
-**Run Examples:**
-\`\`\`bash
-npx playwright test --grep "@auth"
-npx playwright test --grep "@order"
-npx playwright test --grep-invert "@account"
-------------------------------------------------------------------------------
-
-## 17. ✨ Conclusion
-The GoTrade application is functional but exhibits minor inconsistencies across UI and API layers.  
-The automation suite is scalable, modular, and demonstrates readiness for integration into CI/CD.
-------------------------------------------------------------------------------
-
-\`\`\`
-## 18. Author 
-\`\`\`
-👩‍💻 *Darshana Nehulkar*  
-- GitHub: [https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/)
-📅 *Date:* 29th October 2025  
-📧 *dnehulkar805@gmail.com*
-\`\`\`
-`;
-
+var readmeContent = "\n# GQ_Assessment Automation Framework\n\n# 1. Project Description\nThis automation framework validates the GoQuant platform workflows including account add, account management, order placement, API validations, and UI testing, Cross Browser Testing.\n------------------------------------------------------------------------------\n\n# 2. \uD83E\uDDED Executive Summary\nThis report outlines the automated testing process performed on GoQuant\u2019s GoTrade platform.  \nThe tests covered functional, UI/UX, and edge case scenarios.  \nOverall, the platform demonstrated basic stability, with several functional and validation issues identified.\n------------------------------------------------------------------------------\n\n## 3. Technologies and Frameworks Used\n- **Programming Language:** JavaScript / Node.js  \n- **Automation Framework:** Playwright  \n- **Reporting Tools:** Playwright HTML Reporter, Markdown, PDF generation ('markdown-pdf')  \n- **Approach:** End-to-end automation using Page Object Model \n- **Execution:** Manual + Automated API validations \n- **Browsers:** Chromium, Firefox, Safari \n- **Data Management:** Hardcoded credentials and test data files \n- **Build Tools:** npm  \n- **Other Tools:** fs-extra (file system utilities), MD5 checksum verification  \n------------------------------------------------------------------------------\n\n## 4. Prerequisites\n- Node.js v18+\n- npm \n- Playwright browsers installed\n- Git\n- Modern browser (Chromium, Firefox, Safari)\n------------------------------------------------------------------------------\n\n## 5. Installation\n```\ngit clone -b GQ_Assessment https://github.com/Darshana-BS/GQ_Assessment.git\ncd GQ_Assessment\nnpm install\nnpx playwright install\n```\n------------------------------------------------------------------------------\n\n## 6. How to Run Tests\n```\n# Run all tests\nnpx playwright test --reporter=html\nnpx playwright show-report\n\n# View Video recording trace \nnpx playwright show-trace trace/<.zip file name>\nex. npx playwright show-trace trace/TC05_Modify Account.zip\n\n# Run specific test\nnpx playwright test tests/goQuant_cases.spec.js\n\n# Run tests in headless mode \nnpx playwright test --headless \n\n# Run tests in head mode \nnpx playwright test --headed  \n\n# Run tests to save /test-results/resultsjson results \nnpx playwright test --reporter=json,html --output=playwright-report > /Users/darsh_cf/Desktop/DN_cypress/GoQuant_Auto_Asse/test-results/results.json --project=chromium --headed\nnpm run test:report \n\n# Run test to copy report with date, time and to github automaticaly \n\"test:reportcopy\": \"npx playwright test --reporter=html && node copyReport.js\"\n\n# Run cases and save browser specific results in <browser_name>_results \n\"test:chrome\": \"npx playwright test --project=chromium --reporter=html --output=chrome_results\",\n\"test:firefox\": \"npx playwright test --project=firefox --reporter=html --output=firefox_results\",\n\"test:safari\": \"npx playwright test --project=webkit --reporter=html --output=webkit_results\",\n\n# Generate MD5 checksums\nmkdir -p GQ_Assessment_Report\nfind . -type f ! -path \"*/.*\" -print0 | xargs -0 -I{} md5 -r {} > GQ_Assessment_Report/md5_report.txt \n\n# Generate combined PDF report \nnode generateReport.js\n```\n------------------------------------------------------------------------------\n\n# 7. Project Structure\n```\npages/                    # Page object models for UI interactions\ntests/                    # Playwright test scripts\nfixtures/                 # Test data and reusable assets\nGQ_Assessment_Report/     # Generated MD5, HTML, and PDF reports\npackage.json              # Node.js project configuration\ngenerateReport.js         # Script to generate MD5 + Playwright PDF report\nplaywright.config.js      # Configs for tests being executed\n``` \n------------------------------------------------------------------------------\n\n## 8. Reporting and Results\n```\n**Top 10 MD5 files:**\nMD5 Report: GQ_Assessment_Report/md5_report.txt \u2014 lists MD5 hashes of all project files for integrity check\nPlaywright HTML Report: GQ_Assessment_Report/playwright-report/index.html \u2014 detailed pass/fail report for all test cases\nCombined PDF Report: GQ_Assessment_Report/Detailed_Report.pdf \u2014 single file containing project overview, MD5 summary, and test results\n| Hash | File |\n".concat(md5Table, "\n").concat(credentials, "\n```\n------------------------------------------------------------------------------\n\n## 9. \uD83E\uDDEA Test Case Overview\n| Category   | Scenarios  | Tools Used |\n|----------- |------------|------------|\n| Functional | Login validation, Account creation, Account Modify, Account Delete, Place Order, Validate Account status, Get order details, Cancel Order API, Switch Views, Log out | Playwright |\n| UI/UX      | Page elements, modal handling, dropdowns | Playwright |\n| Edge Case  | `/gotrade/v3/users` | Playwright |\n| API        | `/gotrade/v3/credentials`, `/gotrade/v3/cancel_all` | Playwright APIRequest |\n\n*Total Tests: **22**  \n*Passed: **14**  \n*Failed (Expected): **2**\n------------------------------------------------------------------------------\n\n## 10 \uD83E\uDDE9 Challenges Faced\n- Dynamic IDs ('radix-*') made locators unstable.\n- Modal elements required explicit waits.\n- GitHub push blocked due to PAT (resolved by removing file and rewriting history).\n- Playwright Test did not expect test() to be called here (due to hat means you have nested playwright dependencies \u2014 \n  usually happens if some other dependency also includes @playwright/test.)\n------------------------------------------------------------------------------\n\n## 11. Known Bugs / Notes\n- Update API sometimes returns 400 (handled)\n- Cancel Order API sometimes returns 422 (handled) \n- Orders are placed but not displayed in the orders history (coult not automate, as there are no orders) \n- Cancel single orders are not displayed due to order issue (could not automate, as there are no orders)\n\n### \uD83E\uDEB2 Key Findings\n\n### \uD83D\uDD34 Critical\n| ID | Issue  | Expected vs Actual | Steps to Reproduce |\n|----|--------|--------------------|--------------------|\n| 1  | Orders are not displayed in the order history | Should display the orders placed successfully | Execute the place order api and validate orders |\n| 2  | API `/gotrade/v3/cancel_all`' response delayed | Should return < 200ms | Execute cancel API in test |\n\n### \uD83D\uDFE1 Medium\n| ID | Issue  | Observation | Evidence  |\n|----|--------|-------------|-----------|\n| 3  | Modify Account is displaying incorrect message  | Modify account from Accounts and save | [Pending] Attached screenshot |\n| 4  | Metrics data total and assets column data is inconsistent | Metrics validate TC09_validation_Metrics_ | Check results summary |\n\n### \uD83D\uDFE2 Low\n| ID | Issue  | Observation | Note |\n|----|--------|-------------|------|\n| 5  | Sometimes env abruptly lands on 'Something went wrong' | Execute case TC22[Edge_case]_Handle_Something_went_wrong | Environment Issue |\n| 6  | Try again on 'Something went wrong' screen is not functioning | Execute case TC22[Edge_case]_Handle_Something_went_wrong | Environment Issue |\n| 7  | APIs `/v4/groups/all`, `/v3/set_margin_leverage`, `/v3/symbols/leverage-margin`, `/v3/current_leverage_margin` | Failing with 400 Bad request | Navigate / Visit https://test1.gotrade.goquant.io/admin| \n| 8  | APIs `/v1/users` | Failing with 500 Error | Navigate / Visit https://test1.gotrade.goquant.io/admin | \n\n------------------------------------------------------------------------------\n\n## 12. \uD83D\uDCC8 Technical Analysis\n- **Average API response time:** 280ms  \n- **Browser coverage:** 3  \n- **Accessibility:** \n- **Performance:** Stable under 5 concurrent actions \n------------------------------------------------------------------------------\n\n## 13. \uD83D\uDCA1 Recommendations\n- Add stable 'data-testid' attributes for better element targeting.\n- Optimize API response time under 200ms.\n- Improve accessibility attributes (aria-labels, alt text).\n- Enhance error message consistency. \n- Add a better UI handeling for the screen elements of the Add/Clear button (expected = dropdown to select % should stay until user clicks somwhere elese)\n------------------------------------------------------------------------------\n\n## 14. \uD83D\uDCF8 Evidence & Reports\n| \uD83E\uDDFE Type | \uD83D\uDCC1 Location | \uD83D\uDD17 Open / Notes |\n|----------|--------------|----------------|\n| \uD83E\uDDE0 **HTML Test Report** | [GQ_Assessment_Report/playwright-report/index.html](./GQ_Assessment_Report/playwright-report/index.html) | \u25B6\uFE0F *View full Playwright test results* |\n| \uD83E\uDDE0 **PDF Test Report | [GQ_Assessment_Report/GQ_Assessment_Report/Detailed_Report.md](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/GQ_Assessment_Report/GQ_Assessment_Report/Detailed_Report.md) | \uD83E\uDE84 *Backup local report location* |\n| \uD83E\uDDE9 **Trace Files** | [tests/trace/Restructured_cases](https://github.com/Darshana-BS/GQ_Assessment/tree/GQ_Assessment/tests/trace/Restructured_cases) | \uD83D\uDD0D *Replay test steps in Playwright trace viewer* |\n| \uD83D\uDDBC\uFE0F **Screenshots** | [reports/screenshots/](./reports/screenshots/) | \uD83D\uDCF8 *Pending upload / captured test images* | [Pending]\n------------------------------------------------------------------------------ \n\n## 15. \uD83E\uDDE9 Test Organization\nAll Playwright test cases are placed under the `tests/` directory.  \nEach module or functionality has its own `.spec.js` file for better organization.\n\n```bash\ntests/\n\u251C\u2500\u2500 account/\n\u2502   \u251C\u2500\u2500 TC03_Add_Account_OKX.spec.js\n\u2502   \u251C\u2500\u2500 TC04_Add_Account_Binance_COINM.spec.js\n\u2502   \u251C\u2500\u2500 TC04_Add_Account_Binance_USDM.spec.js\n\u2502   \u251C\u2500\u2500 TC05_Modify_Account_Invalid_details.spec.js\n\u2502   \u251C\u2500\u2500 TC17_Add_Invalid_account.spec.js\n\u2502   \u251C\u2500\u2500 TC18_Delete_Account.spec.js\n\u2502   \u251C\u2500\u2500 TC19_Validate_Account_Status.spec.js\n\u2502   \u251C\u2500\u2500 TC20_Modify_Account_Valid.spec.js\n\u2502   \u2514\u2500\u2500 TC21_Add_Account_Valid.spec.js\n\n\u251C\u2500\u2500 auth/\n\u2502   \u251C\u2500\u2500 TC01_LoginInvalid_Creds.spec.js\n\u2502   \u251C\u2500\u2500 TC02_LoginValid_Creds.spec.js\n\u2502   \u251C\u2500\u2500 TC20_Logout.spec.js\n\u2502   \u2514\u2500\u2500 TC22_Login_with_black_email_password.spec.js\n\n\u251C\u2500\u2500 dashboard/\n\u2502   \u251C\u2500\u2500 [Pending]_TC15_Switch_to_Order_book_Consolidated_view.spec.js\n\u2502   \u251C\u2500\u2500 TC09_Validate_Metrics.spec.js\n\u2502   \u251C\u2500\u2500 TC10_add_clear_assets.spec.js\n\u2502   \u251C\u2500\u2500 TC12_Kill_Edge.spec.js\n\u2502   \u251C\u2500\u2500 TC13_Liquidate_Positions.spec.js\n\u2502   \u2514\u2500\u2500 TC14_Switch_to_smart_order_routing.spec.js\n\n\u2514\u2500\u2500 order/\n    \u251C\u2500\u2500 TC06_Place_Binance_COINM_order.spec.js\n    \u251C\u2500\u2500 TC06_Place_Binance_USDM_order.spec.js\n    \u251C\u2500\u2500 TC06_Place_OKX_Market_order_swap.spec.js\n    \u251C\u2500\u2500 TC08_Place_order_validations_with_empty_details.spec.js\n    \u251C\u2500\u2500 TC11_Cancel_All_Working_Orders.spec.js\n    \u2514\u2500\u2500 TC16_Place_Short_Sell_order.spec.js\n```\n\nAll 22 Playwright test cases are structured across feature-based spec files:\n\n| Module                | Test Cases                    | Folder              |\n|-----------------------|-------------------------------|---------------------|\n| Authentication        | TC01 \u2013 TC02, TC20 - T20       | `/tests/auth/`    |\n| Account Management    | TC03 \u2013 TC05, TC17 - TC19, TC21| `/tests/account/` |\n| Order                 | TC06, TC08, TC11, TC16        | `/tests/order/`  |\n| Dashboard             | TC09 \u2013 TC10, TC12 - TC15      | `/tests/api/`     |\n\nThis structure improves test readability, modularity, and maintainability.\n\n## 16. \uD83C\uDFF7\uFE0F Tag-based Execution\n\n| Command                                      | Description                         |\n| ---------------------------------------------| ----------------------------------- |\n| `npx playwright test --grep \"@auth\"`       | Run only authentication tests       |\n| `npx playwright test --grep \"@account\"`    | Run only account-related tests      |\n| `npx playwright test --grep \"@order\"`      | Run only order tests                |\n| `npx playwright test --grep \"@dashboard\"`  | Run the full regression suite       |\n| `npx playwright test --grep-invert \"@order\"`| Run all UI tests excluding API ones |\n\nAll Playwright tests are categorized with tags for selective execution:\n\n| Tag       | Description                              |\n|-----------|------------------------------------------|\n| @auth     | Login & authentication flows             |\n| @account  | Account creation, modification, deletion |\n| @order    | Order placement & validation             |\n| @dashboard| API endpoint validation                  |\n| @logout   | Logout functionality                     |\n\n**Run Examples:**\n```bash\nnpx playwright test --grep \"@auth\"\nnpx playwright test --grep \"@order\"\nnpx playwright test --grep-invert \"@account\"\n------------------------------------------------------------------------------\n\n## 17. \u2728 Conclusion\nThe GoTrade application is functional but exhibits minor inconsistencies across UI and API layers.  \nThe automation suite is scalable, modular, and demonstrates readiness for integration into CI/CD.\n------------------------------------------------------------------------------\n\n```\n## 18. Author \n```\n\uD83D\uDC69\u200D\uD83D\uDCBB *Darshana Nehulkar*  \n- GitHub: [https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/)\n\uD83D\uDCC5 *Date:* 29th October 2025  \n\uD83D\uDCE7 *dnehulkar805@gmail.com*\n```\n");
 // Step #: Write README.md
-fs.writeFileSync(README_FILE, readmeContent);
+fs_extra_1.default.writeFileSync(README_FILE, readmeContent);
 console.log('✅ Dynamic README.md updated!');
-
 // Step #: Write MD5 
 // fs.writeFileSync('GQ_Assessment_Report/md5_report.txt', report);
 // console.log('MD5 report saved at GQ_Assessment_Report/md5_report.txt');
-
-const summarySection = `
-## 📋 Test Summary
-
-This report summarizes the automated test results for the GoQuant Assessment project.
-All test scripts were executed using **Playwright**, with supporting API tests via **Postman**.
-Each module includes validation for login, account management, order execution, and API response integrity.
-`;
-
-const finalReport = `
-# 🧠 GoQuant QA Assessment Report
-
-${summarySection}
-
-${evidenceSection}
-
-${md5Table}
-
-${credentials}
-`;
-
+var summarySection = "\n## \uD83D\uDCCB Test Summary\n\nThis report summarizes the automated test results for the GoQuant Assessment project.\nAll test scripts were executed using **Playwright**, with supporting API tests via **Postman**.\nEach module includes validation for login, account management, order execution, and API response integrity.\n";
+var finalReport = "\n# \uD83E\uDDE0 GoQuant QA Assessment Report\n\n".concat(summarySection, "\n\n").concat(evidenceSection, "\n\n").concat(md5Table, "\n\n").concat(credentials, "\n");
 //Generate detail report md5 and PDF 
-fs.writeFileSync('./GQ_Assessment_Report/Detailed_Report.md', finalReport);
-
-const markdownpdf = require('markdown-pdf');
-fs.writeFileSync('./GQ_Assessment_Report/Detailed_Report.md', finalReport);
-const outputDir = './GQ_Assessment_Report';
-
+fs_extra_1.default.writeFileSync('./GQ_Assessment_Report/Detailed_Report.md', finalReport);
+var markdownpdf = require('markdown-pdf');
+fs_extra_1.default.writeFileSync('./GQ_Assessment_Report/Detailed_Report.md', finalReport);
+var outputDir = './GQ_Assessment_Report';
 // Save Markdown version
-const markdownPath = path.join(outputDir, 'Detailed_Report.md');
-fs.writeFileSync(markdownPath, finalReport);
+var markdownPath = path_1.default.join(outputDir, 'Detailed_Report.md');
+fs_extra_1.default.writeFileSync(markdownPath, finalReport);
 console.log('✅ Markdown report created successfully.');
-
 // Convert Markdown to PDF
-const pdfPath = path.join(outputDir, 'Detailed_Report.pdf');
+var pdfPath = path_1.default.join(outputDir, 'Detailed_Report.pdf');
 markdownpdf()
-  .from(markdownPath)
-  .to(pdfPath, function () {
-    console.log(`✅ PDF successfully generated: ${pdfPath}`);
-  });
-
-
+    .from(markdownPath)
+    .to(pdfPath, function () {
+    console.log("\u2705 PDF successfully generated: ".concat(pdfPath));
+});
 //Generate Live test status report 
 function generateMarkdownReport() {
-  const date = new Date().toLocaleString('en-IN');
-  const resultFile = path.join(reportFolder, './GQ_Assessment_Report/json/test-results.json');
-  let total = 0, passed = 0, failed = 0, skipped = 0;
-  let browserStats = {}; // will hold browser-wise summary
-  let testTable = '';
-
-  if (fs.existsSync(resultFile)) {
-    const data = JSON.parse(fs.readFileSync(resultFile, 'utf-8'));
-    const tests = [];
-
-    const extractTests = suite => {
-      if (suite.tests) tests.push(...suite.tests);
-      if (suite.suites) suite.suites.forEach(extractTests);
-    };
-    data.suites.forEach(extractTests);
-
-    total = tests.length;
-    passed = tests.filter(t => t.results?.some(r => r.status === 'passed')).length;
-    failed = tests.filter(t => t.results?.some(r => r.status === 'failed')).length;
-    skipped = tests.filter(t => t.results?.some(r => r.status === 'skipped')).length;
-
-    // 🔹 Compute browser-wise summary
-    for (const test of tests) {
-      for (const result of test.results || []) {
-        const browser = result.projectName || 'unknown';
-        if (!browserStats[browser]) browserStats[browser] = { total: 0, passed: 0, failed: 0, skipped: 0 };
-        browserStats[browser].total++;
-        if (result.status === 'passed') browserStats[browser].passed++;
-        else if (result.status === 'failed') browserStats[browser].failed++;
-        else browserStats[browser].skipped++;
-      }
+    var date = new Date().toLocaleString('en-IN');
+    var resultFile = path_1.default.join(reportFolder, './GQ_Assessment_Report/json/test-results.json');
+    var total = 0, passed = 0, failed = 0, skipped = 0;
+    var browserStats = {}; // will hold browser-wise summary
+    var testTable = '';
+    if (fs_extra_1.default.existsSync(resultFile)) {
+        var data = JSON.parse(fs_extra_1.default.readFileSync(resultFile, 'utf-8'));
+        var tests_2 = [];
+        var extractTests_1 = function (suite) {
+            if (suite.tests)
+                tests_2.push.apply(tests_2, suite.tests);
+            if (suite.suites)
+                suite.suites.forEach(extractTests_1);
+        };
+        data.suites.forEach(extractTests_1);
+        total = tests_2.length;
+        passed = tests_2.filter(function (t) { var _a; return (_a = t.results) === null || _a === void 0 ? void 0 : _a.some(function (r) { return r.status === 'passed'; }); }).length;
+        failed = tests_2.filter(function (t) { var _a; return (_a = t.results) === null || _a === void 0 ? void 0 : _a.some(function (r) { return r.status === 'failed'; }); }).length;
+        skipped = tests_2.filter(function (t) { var _a; return (_a = t.results) === null || _a === void 0 ? void 0 : _a.some(function (r) { return r.status === 'skipped'; }); }).length;
+        // 🔹 Compute browser-wise summary
+        for (var _i = 0, tests_1 = tests_2; _i < tests_1.length; _i++) {
+            var test = tests_1[_i];
+            for (var _a = 0, _b = test.results || []; _a < _b.length; _a++) {
+                var result = _b[_a];
+                var browser = result.projectName || 'unknown';
+                if (!browserStats[browser])
+                    browserStats[browser] = { total: 0, passed: 0, failed: 0, skipped: 0 };
+                browserStats[browser].total++;
+                if (result.status === 'passed')
+                    browserStats[browser].passed++;
+                else if (result.status === 'failed')
+                    browserStats[browser].failed++;
+                else
+                    browserStats[browser].skipped++;
+            }
+        }
+        // 🔹 Build test status table
+        testTable = tests_2.map(function (t) {
+            var _a, _b, _c, _d, _e, _f;
+            var name = t.title || 'Untitled';
+            var status = ((_b = (_a = t.results) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.status) || 'unknown';
+            var browser = ((_d = (_c = t.results) === null || _c === void 0 ? void 0 : _c[0]) === null || _d === void 0 ? void 0 : _d.projectName) || '—';
+            var duration = ((_f = (_e = t.results) === null || _e === void 0 ? void 0 : _e[0]) === null || _f === void 0 ? void 0 : _f.duration) ? "".concat(t.results[0].duration, "ms") : '—';
+            var icon = status === 'passed' ? '✅' : status === 'failed' ? '❌' : '⚪️';
+            return "| ".concat(name, " | ").concat(browser, " | ").concat(icon, " ").concat(status.toUpperCase(), " | ").concat(duration, " |");
+        }).join('\n');
     }
-
-    // 🔹 Build test status table
-    testTable = tests.map(t => {
-      const name = t.title || 'Untitled';
-      const status = t.results?.[0]?.status || 'unknown';
-      const browser = t.results?.[0]?.projectName || '—';
-      const duration = t.results?.[0]?.duration ? `${t.results[0].duration}ms` : '—';
-      const icon = status === 'passed' ? '✅' : status === 'failed' ? '❌' : '⚪️';
-      return `| ${name} | ${browser} | ${icon} ${status.toUpperCase()} | ${duration} |`;
-    }).join('\n');
-  } else {
-    testTable = '| No test results found | — | — | — |';
-  }
-
-  // 🔹 Build browser summary table
-  const browserTable = Object.keys(browserStats).length
-    ? Object.entries(browserStats)
-        .map(([browser, stats]) =>
-          `| ${browser} | ${stats.total} | ${stats.passed} | ${stats.failed} | ${stats.skipped} |`)
-        .join('\n')
-    : '| — | — | — | — | — |';
-
-  // 🔹 Trace table
-  const traces = fs.existsSync(traceDir)
-    ? fs.readdirSync(traceDir).filter(f => f.endsWith('.zip'))
-    : [];
-  const traceTable = traces.length
-    ? traces.map(f => `| ${f} | [View Trace](../tests/trace/${f}) | ✅ |`).join('\n')
-    : '| No traces found | — | — |';
-
-
-
-  fs.writeFileSync(mdFile, md.trim());
-  console.log(`✅ Markdown report saved with browser-wise stats: ${mdFile}`);
+    else {
+        testTable = '| No test results found | — | — | — |';
+    }
+    // 🔹 Build browser summary table
+    var browserTable = Object.keys(browserStats).length
+        ? Object.entries(browserStats)
+            .map(function (_a) {
+            var browser = _a[0], stats = _a[1];
+            return "| ".concat(browser, " | ").concat(stats.total, " | ").concat(stats.passed, " | ").concat(stats.failed, " | ").concat(stats.skipped, " |");
+        })
+            .join('\n')
+        : '| — | — | — | — | — |';
+    // 🔹 Trace table
+    var traces = fs_extra_1.default.existsSync(traceDir)
+        ? fs_extra_1.default.readdirSync(traceDir).filter(function (f) { return f.endsWith('.zip'); })
+        : [];
+    var traceTable = traces.length
+        ? traces.map(function (f) { return "| ".concat(f, " | [View Trace](../tests/trace/").concat(f, ") | \u2705 |"); }).join('\n')
+        : '| No traces found | — | — |';
+    fs_extra_1.default.writeFileSync(mdFile, md.trim());
+    console.log("\u2705 Markdown report saved with browser-wise stats: ".concat(mdFile));
 }
-
-const crypto = require('crypto');
-
+var crypto = require('crypto');
 // Function to read Playwright JSON test results
 function getPlaywrightResults() {
-  const resultsPath = path.join(__dirname, '../test-results/results.json');
-  if (!fs.existsSync(resultsPath)) {
-    return { summary: 'No results found', tests: [] };
-  }
-
-  const data = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
-  const tests = [];
-
-  if (data.suites) {
-    // recursively extract all tests
-    function extractTests(suite) {
-      if (suite.tests) {
-        suite.tests.forEach(test => {
-          tests.push({
-            name: test.title,
-            status: test.outcome || test.status || 'unknown',
-            duration: test.duration || 0
-          });
-        });
-      }
-      if (suite.suites) suite.suites.forEach(extractTests);
+    var resultsPath = path_1.default.join(__dirname, '../test-results/results.json');
+    if (!fs_extra_1.default.existsSync(resultsPath)) {
+        return { summary: 'No results found', tests: [] };
     }
-    data.suites.forEach(extractTests);
-  }
-
-  const passed = tests.filter(t => t.status === 'passed').length;
-  const failed = tests.filter(t => t.status === 'failed').length;
-  const total = tests.length;
-
-  const summary = `Total Tests: ${total} | ✅ Passed: ${passed} | ❌ Failed: ${failed}`;
-  return { summary, tests };
+    var data = JSON.parse(fs_extra_1.default.readFileSync(resultsPath, 'utf8'));
+    var tests = [];
+    if (data.suites) {
+        // recursively extract all tests
+        function extractTests(suite) {
+            if (suite.tests) {
+                suite.tests.forEach(function (test) {
+                    tests.push({
+                        name: test.title,
+                        status: test.outcome || test.status || 'unknown',
+                        duration: test.duration || 0
+                    });
+                });
+            }
+            if (suite.suites)
+                suite.suites.forEach(extractTests);
+        }
+        data.suites.forEach(extractTests);
+    }
+    var passed = tests.filter(function (t) { return t.status === 'passed'; }).length;
+    var failed = tests.filter(function (t) { return t.status === 'failed'; }).length;
+    var total = tests.length;
+    var summary = "Total Tests: ".concat(total, " | \u2705 Passed: ").concat(passed, " | \u274C Failed: ").concat(failed);
+    return { summary: summary, tests: tests };
 }
-
-const { summary, table } = extractPlaywrightResults();
-let resultsSection = `
-## ✅ Summary of Last Execution
-${summary}
-
-## 📋 Detailed Test Results
-${table}
-
-`;
-
+var _a = extractPlaywrightResults(), summary = _a.summary, table = _a.table;
+var resultsSection = "\n## \u2705 Summary of Last Execution\n".concat(summary, "\n\n## \uD83D\uDCCB Detailed Test Results\n").concat(table, "\n\n");
 // --------------------------------------------------------------------
 // 🧪 ADD PLAYWRIGHT RESULTS SUMMARY TO MARKDOWN
 // --------------------------------------------------------------------
-const resultsPath = './test-results/results.json';
+var resultsPath = './test-results/results.json';
 resultsSection = '\n## 🧪 Latest Playwright Test Results\n';
-
 try {
-  if (fs.existsSync(resultsPath)) {
-    const data = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
-    const tests = [];
-
-    // Flatten all test entries from nested suites
-    if (data.suites) {
-      for (const suite of data.suites) {
-        if (suite.specs) {
-          for (const spec of suite.specs) {
-            const name = spec.title || spec.name || 'Unnamed Test';
-            const status = spec.ok ? '✅ Passed' : '❌ Failed';
-            tests.push(`- **${name}** — ${status}`);
-          }
+    if (fs_extra_1.default.existsSync(resultsPath)) {
+        var data = JSON.parse(fs_extra_1.default.readFileSync(resultsPath, 'utf8'));
+        var tests = [];
+        // Flatten all test entries from nested suites
+        if (data.suites) {
+            for (var _i = 0, _b = data.suites; _i < _b.length; _i++) {
+                var suite = _b[_i];
+                if (suite.specs) {
+                    for (var _c = 0, _d = suite.specs; _c < _d.length; _c++) {
+                        var spec = _d[_c];
+                        var name_1 = spec.title || spec.name || 'Unnamed Test';
+                        var status_1 = spec.ok ? '✅ Passed' : '❌ Failed';
+                        tests.push("- **".concat(name_1, "** \u2014 ").concat(status_1));
+                    }
+                }
+            }
         }
-      }
+        if (tests.length > 0) {
+            resultsSection += tests.join('\n');
+        }
+        else {
+            resultsSection += 'No tests found in the JSON file.\n';
+        }
     }
-
-    if (tests.length > 0) {
-      resultsSection += tests.join('\n');
-    } else {
-      resultsSection += 'No tests found in the JSON file.\n';
+    else {
+        resultsSection += '⚠️ test-results/results.json not found.\n';
     }
-  } else {
-    resultsSection += '⚠️ test-results/results.json not found.\n';
-  }
-} catch (err) {
-  resultsSection += `⚠️ Error reading Playwright results: ${err.message}\n`;
 }
-
+catch (err) {
+    resultsSection += "\u26A0\uFE0F Error reading Playwright results: ".concat(err.message, "\n");
+}
 // Append section safely to your report
 if (typeof markdown === 'undefined') {
-  markdown = '';
+    markdown = '';
 }
 markdown += resultsSection;
-
 // Save markdown to file to Generate Live test status md5 report
-fs.writeFileSync('./GQ_Assessment_Report/Detailed_Tests_Status_Report.md', markdown);
+fs_extra_1.default.writeFileSync('./GQ_Assessment_Report/Detailed_Tests_Status_Report.md', markdown);
 console.log('✅ Detailed report updated with Playwright results.');
-
 // Append to existing markdown variable 
-markdown += `\n\n${resultsSection}`;
-fs.writeFileSync('./GQ_Assessment_Report/Detailed_Tests_Status_Report.md', resultsSection); 
-
+markdown += "\n\n".concat(resultsSection);
+fs_extra_1.default.writeFileSync('./GQ_Assessment_Report/Detailed_Tests_Status_Report.md', resultsSection);
 //PDF generate for live cases results status
 // const { execSync } = require('child_process');
 // try {
@@ -665,12 +290,10 @@ fs.writeFileSync('./GQ_Assessment_Report/Detailed_Tests_Status_Report.md', resul
 // }
 // fs.writeFileSync('./GQ_Assessment_Report/Detailed_Tests_Report.md', markdown);
 // console.log('✅ Detailed report updated with Playwright results.');
-
 // // 📄 Generate PDF from Markdown fpr Live status results 
 // const pypandoc = require('pypandoc');
 // const mdPath = './GQ_Assessment_Report/Detailed_Tests_Report.md';
 // const statuspdfPath = './GQ_Assessment_Report/Detailed_Tests_Report.pdf';
-
 // try {
 //   pypandoc.convert_file(mdPath, 'pdf', {
 //     outputfile: pdfPath,
@@ -682,25 +305,21 @@ fs.writeFileSync('./GQ_Assessment_Report/Detailed_Tests_Status_Report.md', resul
 // } 
 // generateModuleReports.js
 // const fs = require('fs');
-
-const modules = ['auth', 'account', 'orders']; // add your folders here
-
-modules.forEach(module => {
-  console.log(`\n📦 Generating report for module: ${module}`);
-
-  const moduleDir = `tests/${module}`;
-  const reportDir = `GQ_Assessment_Report/${module}`;
-
-  if (!fs.existsSync(moduleDir)) {
-    console.log(`⚠️ Skipping ${module} — no tests found`);
-    return;
-  }
-
-  try {
-    // Run tests for this module
-    execSync(`npx playwright test ${moduleDir} --reporter=html --output=${reportDir}`, { stdio: 'inherit' });
-    console.log(`✅ Report generated at: ${reportDir}/index.html`);
-  } catch (err) {
-    console.error(`❌ Error running tests for ${module}:`, err.message);
-  }
+var modules = ['auth', 'account', 'orders']; // add your folders here
+modules.forEach(function (module) {
+    console.log("\n\uD83D\uDCE6 Generating report for module: ".concat(module));
+    var moduleDir = "tests/".concat(module);
+    var reportDir = "GQ_Assessment_Report/".concat(module);
+    if (!fs_extra_1.default.existsSync(moduleDir)) {
+        console.log("\u26A0\uFE0F Skipping ".concat(module, " \u2014 no tests found"));
+        return;
+    }
+    try {
+        // Run tests for this module
+        (0, child_process_1.execSync)("npx playwright test ".concat(moduleDir, " --reporter=html --output=").concat(reportDir), { stdio: 'inherit' });
+        console.log("\u2705 Report generated at: ".concat(reportDir, "/index.html"));
+    }
+    catch (err) {
+        console.error("\u274C Error running tests for ".concat(module, ":"), err.message);
+    }
 });

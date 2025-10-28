@@ -1,0 +1,16 @@
+// @ts-nocheck
+import { test, expect } from '@playwright/test';
+import { GoQuantMain } from '../../pages/GoQuantMainTs';
+//import { startTracing } from '../utils/tracingHelperforstructuredcases';
+
+//-----------------------------TC_02_Login_using_valid_creds_[Passed]--------------------------------
+test('Login with valid user credentials @auth', async ({ browser }) => {
+  const context = await browser.newContext();
+  // const stopTrace = await startTracing(context, 'TC02_LoginValid_Creds');
+  const page = await context.newPage();
+  const gqMain = new GoQuantMain(page);
+  // Enter valid credentials to signIn
+  await gqMain.login('user14@goquant.io', '60Re3G9KvvFl4Ihegxpi');
+  await gqMain.afterLogin();
+  // await stopTrace();
+});
