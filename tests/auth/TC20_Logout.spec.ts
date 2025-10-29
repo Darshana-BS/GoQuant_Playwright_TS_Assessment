@@ -4,7 +4,7 @@ import { GoQuantMain } from '../../pages/GoQuantMainTs';
 //import { startTracing } from '../utils/tracingHelperforstructuredcases';
 
 //-----------------------------TC_20_Logout_User_[Passed]--------------------------------
-test('Log out of account @auth', async ({browser})=> {
+test('Log out of account @auth @logout', async ({browser})=> {
   const context = await browser.newContext();
   // const stopTrace = await startTracing(context, 'TC20_Logout');
   const page = await context.newPage();

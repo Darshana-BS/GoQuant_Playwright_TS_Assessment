@@ -22,14 +22,17 @@
     "report:account": "npx playwright test tests/account --reporter html --output docs/account",
     "report:orders": "npx playwright test tests/orders --reporter html --output docs/orders",
     "report:assets": "npx playwright test tests/assets --reporter html --output docs/assets",
+    "report:a11y": "npx playwright test tests/assets --reporter html --output docs/assets",
     "report:all": "npm run report:auth && npm run report:account && npm run report:orders && npm run report:assets && npm run generate:dashboard"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.56.1",
     "@types/node": "^24.9.2",
+    "axe-core": "^4.11.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
@@ -39,4 +42,3 @@
     "playwright": "^1.56.1"
   }
 }
-
