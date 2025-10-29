@@ -4,7 +4,6 @@ import fs from 'fs';
 const { execSync } = require('child_process');
 import path from 'path';
 
-
 // ---- Extract test results from Playwright JSON ----
 function extractPlaywrightResults() {
   const resultsPath = path.join(__dirname, '../test-results/results.json');
@@ -311,7 +310,7 @@ ${credentials}
 ## 12. 📈 Technical Analysis
 - **Average API response time:** 280ms  
 - **Browser coverage:** 3  
-- **Accessibility:** 
+- **Accessibility:** Done 
 - **Performance:** Stable under 5 concurrent actions 
 ------------------------------------------------------------------------------
 

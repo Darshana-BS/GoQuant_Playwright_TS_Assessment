@@ -9,11 +9,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "fs-extra": "^11.3.2"
-  },
+  "type": "module",
   "devDependencies": {
+    "@types/node": "^24.9.2",
+    "fs-extra": "^11.3.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
 }

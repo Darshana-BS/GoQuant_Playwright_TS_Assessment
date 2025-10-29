@@ -61,7 +61,7 @@ These traces include full steps, network logs, screenshots, and console logs for
 
 
 | c6e1d98156c7027fd8c3dbea26dcb53d | ./dummy.txt |
-| 9f2470257011ce3b5745fd19f49e33aa | ./copyReport.js |
+| aa054e6898bd4d75bd36891db8836574 | ./generateDashboard.ts |
 | 64e2ced2ec895a004811c26bc47a562a | ./node_modules/pend/test.js |
 | e8a22696b017d8f536112ef54c81f3fa | ./node_modules/pend/LICENSE |
 | 51cdd3c93701ca33381fabda25149a99 | ./node_modules/pend/index.js |

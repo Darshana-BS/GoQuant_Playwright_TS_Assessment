@@ -1,8 +1,10 @@
 // @ts-nocheck
 
+// import fs from 'fs-extra';
 import fs from 'fs-extra';
 import { execSync } from 'child_process';
 import path from 'path';
+
 
 // ---- Extract test results from Playwright JSON ----
 function extractPlaywrightResults() {
@@ -167,6 +169,10 @@ These traces include full steps, network logs, screenshots, and console logs for
 const readmeContent = `
 # GQ_Assessment Automation Framework
 
+# Main Report: https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/Darshana_Nehulkar%20%5BAutomation%20Test%20Report%5D.pdf 
+------------------------------------------------------------------------------
+
+
 # 1. Project Description
 This automation framework validates the GoQuant platform workflows including account add, account management, order placement, API validations, and UI testing, Cross Browser Testing.
 ------------------------------------------------------------------------------
@@ -248,7 +254,7 @@ mkdir -p GQ_Assessment_Report
 find . -type f ! -path "*/.*" -print0 | xargs -0 -I{} md5 -r {} > GQ_Assessment_Report/md5_report.txt 
 
 # Generate combined PDF report 
-node generateReport.js
+node generateReport.js or node generateReport.ts
 \`\`\`
 ------------------------------------------------------------------------------
 
@@ -330,7 +336,7 @@ ${credentials}
 ## 12. 📈 Technical Analysis
 - **Average API response time:** 280ms  
 - **Browser coverage:** 3  
-- **Accessibility:** 
+- **Accessibility:** Done
 - **Performance:** Stable under 5 concurrent actions 
 ------------------------------------------------------------------------------
 
@@ -373,6 +379,7 @@ tests/
 │   ├── TC02_LoginValid_Creds.spec.ts
 │   ├── TC20_Logout.spec.ts
 │   └── TC22_Login_with_black_email_password.spec.ts
+│   └── TC25__Login_with_invalid_password.spec.ts
 
 ├── dashboard/
 │   ├── [Pending]_TC15_Switch_to_Order_book_Consolidated_view.spec.ts
