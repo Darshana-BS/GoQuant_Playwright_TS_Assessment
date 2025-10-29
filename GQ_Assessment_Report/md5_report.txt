@@ -2743,7 +2743,7 @@ b04b2df86a3986c51d12f416e2d5d91f ./node_modules/jsbn/index.js
 2eb56edbb7819cbc7902f1114f1364a9 ./node_modules/jsbn/example.html
 a10cd005c4727beb0ca9b4f9fb37b441 ./node_modules/jsbn/package.json
 2cbb15596cbf1e2f7f6019bc25377fc8 ./node_modules/jsbn/example.js
-bb515ff22332475d833742500fd18cc9 ./GQ_Assessment_Report/generateReport.ts
+b895910aa2e0ea60b7ee154ca27e3c91 ./GQ_Assessment_Report/generateReport.ts
 e32579b56e4f84b40ec170f8d6105a5f ./GQ_Assessment_Report/auth/auth-TC20_Logout-Log-out-of-account-auth-logout-chromium/test-finished-1.png
 e32579b56e4f84b40ec170f8d6105a5f ./GQ_Assessment_Report/auth/auth-TC01_LoginInvalid_Cre-60938-valid-user-credentials-auth-chromium/test-failed-1.png
 3e7ca540003afec229148d3cbcb2ca15 ./GQ_Assessment_Report/auth/auth-TC01_LoginInvalid_Cre-60938-valid-user-credentials-auth-chromium/error-context.md
@@ -3324,8 +3324,8 @@ d41d8cd98f00b204e9800998ecf8427e ./GQ_Assessment_Report/GQ_Assessment_Report/Det
 79a00d5e0bfa6038bca7d633577f4da0 ./GQ_Assessment_Report/GQ_Assessment_Report/Detailed_Report.md
 8b41fc0146401400b3a7d288a7360aa9 ./GQ_Assessment_Report/GQ_Assessment_Report/Detailed_Tests_Status_Report.md
 ce135ff274969025fd1be4b0fc802f27 ./GQ_Assessment_Report/Detailed_Tests_Report.md
-d804c59f5444ef9ee15f0e33e3d28414 ./GQ_Assessment_Report/md5_report.txt
-aab6cb18b916c52138732d26bb125bd6 ./GQ_Assessment_Report/Detailed_Report.md
+de702eb433eec8652a169564b4fd24fe ./GQ_Assessment_Report/md5_report.txt
+9b0a3fc3378262f3c88c73491dbca18d ./GQ_Assessment_Report/Detailed_Report.md
 b00acf7929f1e068fe5f5f4570ba763b ./GQ_Assessment_Report/README.md
 d22b6072b0846cca5b4a0393e28feb9e ./GQ_Assessment_Report/dashboard/dashboard-[Pending] TC15_S-0bbd4-Consolidated-View-dashboard-chromium/test-finished-1.png
 b82b621a5441b54ca19d79d3fd42febc ./GQ_Assessment_Report/dashboard/dashboard-TC14_Switch_to_s-79254-art-order-routing-dashboard-chromium/test-failed-1.png
@@ -3491,7 +3491,7 @@ d22b6072b0846cca5b4a0393e28feb9e ./docs/data/0323efdcb932360ec0325a572c1e9db02d6
 c609c9628b4b3e2baa2be32661a7a7e9 ./docs/data/7a33d5db6370b6de345e990751aa1f1da65ad675.png
 8b41fc0146401400b3a7d288a7360aa9 ./docs/Detailed_Tests_Status_Report.md
 0865cf8cb9d76b775203b5f8d014ce89 ./Darshana_Nehulkar [Automation Test Report].pdf
-d93476b4687dfe75038efba5015769c0 ./README.md
+596f7b625944fccb7094290cdccbc743 ./README.md
 9f2470257011ce3b5745fd19f49e33aa ./copyReport.ts
 fbb9a77f63a320bd60fe9a14bc485c59 ./a11y_report.json
 01dd6a21ccf12ccca935712a5e0767da ./package-lock.json
