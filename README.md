@@ -1,7 +1,9 @@
 
 # GQ_Assessment Automation Framework
 
-# Main Report: https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/Darshana_Nehulkar%20%5BAutomation%20Test%20Report%5D.pdf 
+# Main Report: 
+
+https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/Darshana_Nehulkar%20%5BAutomation%20Test%20Report%5D.pdf 
 ------------------------------------------------------------------------------
 
 
