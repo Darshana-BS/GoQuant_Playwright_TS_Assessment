@@ -8,13 +8,14 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     // "module": "nodenext",
-    "target": "esnext",
+    "target": "ES2020",
     //"module": "commonjs",
       "module": "ESNext",
     "rootDir": "./",
      "outDir": "dist",
     "esModuleInterop": true,
-   //"moduleResolution": "node",
+   "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "types": ["@playwright/test"],
     // For nodejs:
@@ -47,6 +48,6 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  },  "include": ["tests/**/*.ts", "pages/**/*.ts", "utils/**/*.ts", "tests/account/TC03_Add_Account_OKX.spec.ts"],
-  // "include": ["tests/**/*.ts", "tests/account/TC03_Add_Account_OKX.spec.js"]
+  },  "include": ["tests/**/*.ts", "pages/**/*.ts", "utils/**/*.ts"],
+  // "include": ["tests/**/*.ts", "tests/account/TC03_Add_Account_OKX.spec.ts"]
 }

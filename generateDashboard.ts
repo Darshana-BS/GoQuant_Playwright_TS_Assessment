@@ -1,6 +1,7 @@
-// generateDashboard.js
-const fs = require('fs');
-const path = require('path');
+// @ts-nocheck
+// generateDashboard.ts
+import fs from 'fs';
+import path from 'path';
 
 // Define your module report folders
 const modules = [
