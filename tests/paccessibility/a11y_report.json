@@ -7,13 +7,13 @@
     "name": "axe"
   },
   "testEnvironment": {
-    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
     "windowWidth": 1280,
     "windowHeight": 720,
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2025-10-29T13:39:29.011Z",
+  "timestamp": "2025-10-29T15:12:44.319Z",
   "url": "https://test1.gotrade.goquant.io/",
   "toolOptions": {
     "reporter": "v1"

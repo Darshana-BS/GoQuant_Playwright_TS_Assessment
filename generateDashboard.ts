@@ -8,7 +8,7 @@ const modules = [
   { name: 'Authentication', folder: 'auth', desc: 'Login, Logout, and Credential Validation' },
   { name: 'Account Management', folder: 'account', desc: 'Add, Modify, and Delete Accounts' },
   { name: 'Order Management', folder: 'orders', desc: 'Place, Cancel, and Fetch Orders' },
-  { name: 'Assets & Metrics', folder: 'assets', desc: 'Equity and Metrics Verification' },
+  { name: 'Dashboard', folder: 'dashboard', desc: 'Dashboard actions, Equity and Metrics Verification' },
   { name: 'Accessibility', folder: 'accessibility', desc: 'Accessibility Verification' },
 ];
 

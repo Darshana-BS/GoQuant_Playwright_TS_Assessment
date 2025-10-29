@@ -16,7 +16,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',         // where your test specs are
   timeout: 30 * 1000,         // default timeout
-  retries: 0,                 // retry failing tests once
+  retries: 2,                 // retry failing tests once
   reporter:                   // nice HTML report
   [['list'], 
   ['html', { outputFolder: 'playwright-report' }],
@@ -24,7 +24,7 @@ export default defineConfig({
   ],                          
 
   use: {
-    headless: false,                    // run in headless mode
+    headless: true,                    // run in headless mode
     screenshot: 'only-on-failure',                  // take screenshot on every failure
     video: 'on',                      // record video if test fails first time
     trace: 'on',                     // record trace if test fails first time

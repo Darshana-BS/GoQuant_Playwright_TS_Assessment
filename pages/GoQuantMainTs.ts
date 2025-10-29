@@ -158,16 +158,21 @@ export class GoQuantMain  {
     //addinvalidaccountokx ------------------------------------------------------------------------------------------------
     this.invalidaccountMessage = page.getByText('Authentication failed');
 
-    //loginwithblankEmailPassword ------------------------------------------------------------------------------------------------
+    //loginwithblankEmailPassword --------------------------------------------------------------------------------------
     this.blackEmailaliation = page.getByText('Username must be at least 5 characters.');
 
     //accountstatus ---------------------------------------------------------------------------------------------------
     this.tooltip = page.getByText('Connected to the exchange'); 
 
+    //signinwithinvalidPassword------------------------------------------------------------------------------------
+    this.ValidateIncorrectPasswordMessage = page.getByText('The password is invalid');
+    //---------------------------------------------------------------------------------------------------------------
+
     //logout ----------------------------------------------------------------------------------------------------------
     this.userProfile = page.getByRole('button', { name: 'user14@goquant.io' });
     this.logoutButton= page.getByRole('menuitem', { name: 'Sign out' });
-    this.validateLogout = page.getByRole('heading', { name: 'Welcome' })
+    this.validateLogout = page.getByText('Enter your credentials');
+    // this.validateLogout = page.getByRole('heading', { name: 'Welcome' })
     //------------------------------------------------------------------------------------------------------------------
   }
 
@@ -539,8 +544,8 @@ async getOrderdetails(){
   await this.orderHistory.click();
   this.validateAccount = this.page.getByText('Dashk805 OKX');
   await this.validateAccount.click(); 
-  await this.page.pause();
   await expect(this.validateAccount).toHaveText('Dashk805 OKX');
+
   // const accountName = await this.validateAccount.textContent();
   // console.log(`Order has been placed with Account Name: ${accountName}`);
     
@@ -745,7 +750,8 @@ async smartRouting(){
 }
 
 async consolidatedView(){
-  
+  await this.getStarted.click()
+  await this.page.getByTestId('consolidated-orderbook-toggle').click();
 }
 
 async placeOKXSellOrder(quantity){
@@ -828,11 +834,20 @@ async validateAccountStatus(){
   // await expect(tooltip).toHaveText('Cannot communicate with the exchange');
 }
 
+async signinwithinvalidPassword(username,password){
+  await this.page.goto('https://test1.gotrade.goquant.io/auth/login');
+  // await this.gotoHome('https://test1.gotrade.goquant.io/auth/login');
+  await this.userCreds(username, password);
+  await this.signIn.click();    
+  await expect(this.ValidateIncorrectPasswordMessage).toHaveText('The password is invalid');
+}
+
 async logout() {
   await this.getStarted.click();
   await this.userProfile.click();
   await this.logoutButton.click();
-  await expect(this.validateLogout).toHaveText('Welcome');
+  await this.validateLogout;
+  await expect(this.validateLogout).toHaveText('Enter your credentials');
   }
 }
 

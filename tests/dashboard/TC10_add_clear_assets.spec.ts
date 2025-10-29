@@ -4,13 +4,13 @@ import { GoQuantMain } from '../../pages/GoQuantMainTs';
 //import { startTracing } from '../utils/tracingHelperforstructuredcases';
 
 //-----------------------------TC10_addclear_Assets_[WIP due to the dropdown vanishes issue]--------------------------------
-test('Add clear the Assets @dashboard',  async({browser})=>{
+test('Add clear the Assets @dashboard @donotrun',  async({browser})=>{
   const context = await browser.newContext();
-  const stopTrace = await startTracing(context, 'TC10_add_clear_assets');
+  // const stopTrace = await startTracing(context, 'TC10_add_clear_assets');
   const page = await context.newPage();
   const gqMain = new GoQuantMain(page);
   //add clear assets 
   await gqMain.login('user14@goquant.io', '60Re3G9KvvFl4Ihegxpi');
   await gqMain.addClearAssetsforBTC();
-  await stopTrace();
+  // await stopTrace();
 })

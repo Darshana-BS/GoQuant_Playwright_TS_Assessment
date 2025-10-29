@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 import { GoQuantMain } from '../../pages/GoQuantMainTs';
 //import { startTracing } from '../utils/tracingHelperforstructuredcases';
 
-//-----------------------------TC15_Order_Book_Consolidated_view[WIP]--------------------------------
+//-----------------------------TC15_Order_Book_Consolidated_view[Pass]--------------------------------
 test('Enable toggle for Consolidated View @dashboard', async({browser})=>{
   const context = await browser.newContext();
   // const stopTrace = await startTracing(context, 'TC15_Order_Book_Consolidated_view');

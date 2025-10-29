@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 import { GoQuantMain } from '../../pages/GoQuantMainTs';
 //import { startTracing } from '../utils/tracingHelperforstructuredcases';
 
-//-----------------------------TC_06_Place_Binance_Coinm_Order_[FAIL]--------------------------------
+//-----------------------------TC_06_Place_Binance_usdm_Order_[FAIL]--------------------------------
 test('Place Binance USDM order @order', async ({browser})=> {
   const context = await browser.newContext();
   // const stopTrace = await startTracing(context, 'TC06_Place_Binance_USDM_Order');

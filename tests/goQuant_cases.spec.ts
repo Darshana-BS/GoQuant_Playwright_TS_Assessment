@@ -289,3 +289,14 @@ test('Handel Something Went wrong', async ({ browser }) => {
   await stopTrace();
 });
 
+//----------------------TC25_Login_with_invalid_password[WIP]-------------------------------------------
+test('Sign in with invalid, password', async ({ browser }) => {
+  const context = await browser.newContext();
+  const stopTrace = await startTracing(context, 'TC25_Login_with_invalid_password');
+  const page = await context.newPage();
+  const gqMain = new GoQuantMain(page);
+  // Sign in / login with invalid password 
+  await gqMain.login('user14@goquant.io', 'invalid');
+  await gqMain.signinwithinvalidPassword();
+  await stopTrace();
+}); 
