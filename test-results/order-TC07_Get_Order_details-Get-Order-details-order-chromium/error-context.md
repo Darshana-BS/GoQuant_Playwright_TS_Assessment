@@ -1,0 +1,803 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e5]:
+        - link "Go Quant Logo GoTerminal" [ref=e6] [cursor=pointer]:
+          - /url: /gotrade
+          - generic [ref=e7]:
+            - img "Go Quant Logo" [ref=e9]
+            - generic [ref=e10]: GoTerminal
+        - navigation [ref=e11]:
+          - generic [ref=e12]:
+            - navigation "Main" [ref=e13]:
+              - list [ref=e15]:
+                - listitem [ref=e16]:
+                  - button "Markets" [ref=e17] [cursor=pointer]:
+                    - img [ref=e18]
+                    - generic [ref=e21]: Markets
+                    - img [ref=e22]
+            - navigation "Main" [ref=e24]:
+              - list [ref=e26]:
+                - listitem [ref=e27]:
+                  - button "Trading" [ref=e28] [cursor=pointer]:
+                    - img [ref=e29]
+                    - generic [ref=e32]: Trading
+                    - img [ref=e33]
+            - navigation "Main" [ref=e35]:
+              - list [ref=e37]:
+                - listitem [ref=e38]:
+                  - button "Accounts" [ref=e39] [cursor=pointer]:
+                    - img [ref=e40]
+                    - generic [ref=e42]: Accounts
+                    - img [ref=e43]
+        - button "user14@goquant.io" [ref=e46] [cursor=pointer]:
+          - img [ref=e48]
+          - generic [ref=e52]: user14@goquant.io
+          - img [ref=e53]
+      - text: ;
+      - generic [ref=e58]:
+        - generic [ref=e59]:
+          - button "OKX - use....io" [ref=e61] [cursor=pointer]:
+            - button "OKX - use....io" [ref=e62]:
+              - img [ref=e63]
+              - paragraph [ref=e73]: OKX - use....io
+          - generic [ref=e74]:
+            - generic [ref=e76]:
+              - generic [ref=e77]:
+                - img [ref=e78]
+                - paragraph [ref=e82]: Net Asset Value
+              - paragraph [ref=e83]: $0
+            - generic [ref=e84]:
+              - img [ref=e90]
+              - generic [ref=e92]:
+                - generic [ref=e93]:
+                  - paragraph [ref=e94]: Asset Utilization
+                  - generic [ref=e95]: "--"
+                - paragraph [ref=e96]: $0
+            - generic [ref=e100]:
+              - generic [ref=e101]:
+                - paragraph [ref=e102]: 24h Turnover
+                - generic [ref=e103]: "--"
+              - paragraph [ref=e104]: $0
+            - generic [ref=e106]:
+              - generic [ref=e107]:
+                - img [ref=e108]
+                - paragraph [ref=e110]: 24h PnL
+                - paragraph [ref=e113]: "---"
+              - paragraph [ref=e115]: $0
+            - generic [ref=e116]:
+              - paragraph [ref=e118]: 0%24h Max Run-Up
+              - paragraph [ref=e120]: 0%24h Max Drawdown
+        - generic [ref=e121]:
+          - generic [ref=e123]:
+            - generic [ref=e124]:
+              - tablist [ref=e125]:
+                - tab "Native Trading" [selected] [ref=e126] [cursor=pointer]
+              - tabpanel "Native Trading" [ref=e127]:
+                - generic [ref=e129]:
+                  - heading "Trade" [level=4] [ref=e132]
+                  - generic [ref=e133]:
+                    - generic [ref=e135]:
+                      - button "Market-Edge" [ref=e136] [cursor=pointer]:
+                        - generic [ref=e137]: Market-Edge
+                        - img [ref=e139]
+                      - button "Limit-Edge" [ref=e141] [cursor=pointer]:
+                        - generic [ref=e142]: Limit-Edge
+                        - generic:
+                          - img
+                      - button "TWAP-Edge" [ref=e143] [cursor=pointer]:
+                        - generic [ref=e144]: TWAP-Edge
+                        - generic:
+                          - img
+                      - generic [ref=e146] [cursor=pointer]:
+                        - paragraph [ref=e147]: More
+                        - img [ref=e148]
+                    - generic [ref=e150]:
+                      - generic [ref=e151]:
+                        - generic [ref=e153]:
+                          - paragraph [ref=e154]: Symbol
+                          - button [ref=e155] [cursor=pointer]:
+                            - img [ref=e156]
+                        - generic [ref=e159]:
+                          - switch "Discovery Mode" [ref=e160] [cursor=pointer]
+                          - generic [ref=e161]: Discovery Mode
+                      - 'button "BTC-USDT-SWAP Swap Lot Size: 0.01000" [ref=e163] [cursor=pointer]':
+                        - generic [ref=e164]:
+                          - img [ref=e165]
+                          - generic [ref=e167]:
+                            - generic [ref=e168]:
+                              - paragraph [ref=e169]: BTC-USDT-SWAP
+                              - paragraph [ref=e171]: Swap
+                            - paragraph [ref=e174]: "Lot Size: 0.01000"
+                        - img [ref=e175]
+                    - generic [ref=e179]:
+                      - generic [ref=e182]:
+                        - generic [ref=e183]:
+                          - switch [ref=e184] [cursor=pointer]
+                          - checkbox
+                          - generic [ref=e185]:
+                            - text: Smart Order Routing
+                            - paragraph [ref=e186]: Optimize execution across multiple venues
+                        - button [ref=e187] [cursor=pointer]:
+                          - img [ref=e188]
+                      - generic [ref=e191]:
+                        - checkbox "Use Target Position" [ref=e192] [cursor=pointer]
+                        - checkbox
+                        - generic [ref=e193] [cursor=pointer]: Use Target Position
+                        - img [ref=e194]
+                      - generic [ref=e197]:
+                        - generic [ref=e198]:
+                          - text: Quantity
+                          - button [ref=e199] [cursor=pointer]:
+                            - img [ref=e200]
+                        - generic [ref=e204]:
+                          - textbox "1 Contract is 0.01 BTC" [ref=e205]
+                          - generic [ref=e206]:
+                            - generic [ref=e207]: Contracts
+                            - button "1x" [ref=e208] [cursor=pointer]:
+                              - generic [ref=e209]: 1x
+                            - 'button "Min: 0.010" [ref=e210] [cursor=pointer]':
+                              - generic [ref=e211]: "Min: 0.010"
+                      - generic [ref=e212]:
+                        - generic [ref=e213]:
+                          - text: Duration
+                          - button [ref=e214] [cursor=pointer]:
+                            - img [ref=e215]
+                        - generic [ref=e217]:
+                          - textbox "Enter duration" [ref=e218]
+                          - button "Seconds" [ref=e219] [cursor=pointer]:
+                            - generic [ref=e220]: Seconds
+                      - generic [ref=e221]:
+                        - generic [ref=e222]:
+                          - text: Decay Factor
+                          - img [ref=e223]
+                        - spinbutton "Decay Factor" [ref=e225]: "1"
+                      - generic [ref=e227]:
+                        - checkbox "Show Execution Profile" [ref=e228] [cursor=pointer]
+                        - checkbox
+                        - generic [ref=e229] [cursor=pointer]: Show Execution Profile
+                        - img [ref=e230]
+                      - generic [ref=e233]:
+                        - generic [ref=e234]:
+                          - checkbox "Ratio" [ref=e235] [cursor=pointer]
+                          - checkbox
+                          - generic [ref=e236]: Ratio
+                        - generic [ref=e238]:
+                          - generic [ref=e239]:
+                            - checkbox "TP" [ref=e240] [cursor=pointer]
+                            - checkbox
+                            - generic [ref=e241]: TP
+                          - generic [ref=e242]:
+                            - checkbox "SL" [ref=e243] [cursor=pointer]
+                            - checkbox
+                            - generic [ref=e244]: SL
+                      - generic [ref=e245]:
+                        - button "Long" [ref=e246] [cursor=pointer]:
+                          - img [ref=e247]
+                          - text: Long
+                        - button "Short" [ref=e249] [cursor=pointer]:
+                          - img [ref=e250]
+                          - text: Short
+            - button "Trade" [ref=e253] [cursor=pointer]
+          - generic [ref=e254]:
+            - generic [ref=e255]:
+              - button "Order Book" [ref=e256] [cursor=pointer]
+              - button "Chart" [ref=e257] [cursor=pointer]
+            - generic [ref=e263]:
+              - generic [ref=e264]:
+                - button [ref=e265] [cursor=pointer]:
+                  - img [ref=e266]
+                - generic [ref=e268]: BTC-USDT-SWAP
+              - generic [ref=e269]:
+                - generic [ref=e270]: Testnet
+                - generic [ref=e271]: Consolidated
+                - switch "Consolidated" [ref=e272] [cursor=pointer]
+          - generic [ref=e282]:
+            - generic [ref=e283]:
+              - generic [ref=e284]:
+                - button "Working Orders" [ref=e285] [cursor=pointer]
+                - button "Order History" [active] [ref=e286] [cursor=pointer]
+                - button "Open Positions" [ref=e287] [cursor=pointer]
+                - button "Assets" [ref=e288] [cursor=pointer]
+              - generic [ref=e289]:
+                - button "Cancel Working Orders" [ref=e290] [cursor=pointer]
+                - button "Kill-Edge" [ref=e291] [cursor=pointer]
+                - button "Liquidate Positions" [ref=e292] [cursor=pointer]
+                - button "80 accounts selected" [ref=e294] [cursor=pointer]:
+                  - img [ref=e295]
+                  - paragraph [ref=e302]: 80 accounts selected
+            - generic [ref=e307]:
+              - table [ref=e310]:
+                - rowgroup [ref=e311]:
+                  - row "Venue Account Algorithm ID Status Type Symbol Date Time (UTC) Side Avg Fill Price Avg Order Price Fill Quantity Order Quantity Fill Value Order Value Fill Progress Actions" [ref=e312]:
+                    - cell "Venue" [ref=e313]:
+                      - button "Venue" [ref=e315] [cursor=pointer]
+                    - cell "Account" [ref=e316]:
+                      - button "Account" [ref=e318] [cursor=pointer]
+                    - cell "Algorithm ID" [ref=e319]:
+                      - button "Algorithm ID" [ref=e321] [cursor=pointer]
+                    - cell "Status" [ref=e322]:
+                      - button "Status" [ref=e324] [cursor=pointer]
+                    - cell "Type" [ref=e325]:
+                      - button "Type" [ref=e327] [cursor=pointer]
+                    - cell "Symbol" [ref=e328]:
+                      - button "Symbol" [ref=e330] [cursor=pointer]
+                    - cell "Date Time (UTC)" [ref=e331]:
+                      - button "Date Time (UTC)" [ref=e333] [cursor=pointer]:
+                        - text: Date
+                        - text: Time (UTC)
+                        - img [ref=e334]
+                    - cell "Side" [ref=e336]:
+                      - button "Side" [ref=e338] [cursor=pointer]
+                    - cell "Avg Fill Price Avg Order Price" [ref=e339]:
+                      - button "Avg Fill Price Avg Order Price" [ref=e341] [cursor=pointer]:
+                        - text: Avg Fill Price
+                        - text: Avg Order Price
+                        - img [ref=e342]
+                    - cell "Fill Quantity Order Quantity" [ref=e344]:
+                      - button "Fill Quantity Order Quantity" [ref=e346] [cursor=pointer]:
+                        - text: Fill Quantity
+                        - text: Order Quantity
+                        - img [ref=e347]
+                    - cell "Fill Value Order Value" [ref=e349]:
+                      - button "Fill Value Order Value" [ref=e351] [cursor=pointer]:
+                        - text: Fill Value
+                        - text: Order Value
+                        - img [ref=e352]
+                    - cell "Fill Progress" [ref=e354]:
+                      - button "Fill Progress" [ref=e356] [cursor=pointer]
+                    - cell "Actions" [ref=e357]:
+                      - button "Actions" [ref=e359] [cursor=pointer]
+                - rowgroup [ref=e360]:
+                  - generic [ref=e361]:
+                    - row "SOnccJ22cC 102...700 In Progress 102...700 Limit BTC-USDT Swap 2025-10-29 10:04:24 Buy -- 114,537 USDT -- 0.010000 Contracts 0 USDT 1,145.37 USDT 0% Modify Cancel" [ref=e362]:
+                      - cell [ref=e363]:
+                        - button [ref=e366] [cursor=pointer]:
+                          - img [ref=e368]
+                      - cell "SOnccJ22cC" [ref=e378]:
+                        - paragraph [ref=e381]: SOnccJ22cC
+                      - cell "102...700" [ref=e382]:
+                        - generic [ref=e385]:
+                          - generic [ref=e386]: 102...700
+                          - img [ref=e387]
+                      - cell "In Progress 102...700" [ref=e390]:
+                        - generic [ref=e392]:
+                          - paragraph [ref=e393]: In Progress
+                          - generic [ref=e394]:
+                            - generic [ref=e395]: 102...700
+                            - img [ref=e396]
+                      - cell "Limit" [ref=e399]:
+                        - generic [ref=e401]: Limit
+                      - cell "BTC-USDT Swap" [ref=e402]:
+                        - generic [ref=e404]:
+                          - paragraph [ref=e405]: BTC-USDT
+                          - paragraph [ref=e406]: Swap
+                      - cell "2025-10-29 10:04:24" [ref=e407]:
+                        - generic [ref=e409]:
+                          - paragraph [ref=e410]: 2025-10-29
+                          - paragraph [ref=e411]: 10:04:24
+                      - cell "Buy" [ref=e412]:
+                        - generic [ref=e415]: Buy
+                      - cell "-- 114,537 USDT" [ref=e416]:
+                        - generic [ref=e419]:
+                          - paragraph [ref=e420]: "--"
+                          - paragraph [ref=e421]: 114,537 USDT
+                      - cell "-- 0.010000 Contracts" [ref=e422]:
+                        - generic [ref=e425]:
+                          - paragraph [ref=e426]: "--"
+                          - paragraph [ref=e427]: 0.010000 Contracts
+                      - cell "0 USDT 1,145.37 USDT" [ref=e428]:
+                        - generic [ref=e431]:
+                          - paragraph [ref=e432]: 0 USDT
+                          - paragraph [ref=e433]: 1,145.37 USDT
+                      - cell "0%" [ref=e434]:
+                        - generic [ref=e435]:
+                          - progressbar [ref=e436]
+                          - generic [ref=e438]: 0%
+                      - cell "Modify Cancel" [ref=e439]:
+                        - generic [ref=e442]:
+                          - button "Modify" [ref=e443] [cursor=pointer]
+                          - button "Cancel" [ref=e444] [cursor=pointer]
+                    - 'row "TIF: GTC Quantity: 0.010 BTC Price: 114537.3 USDT Instrument Type: Swap" [ref=e445]':
+                      - 'cell "TIF: GTC Quantity: 0.010 BTC Price: 114537.3 USDT Instrument Type: Swap" [ref=e446]':
+                        - generic [ref=e447]:
+                          - generic: "TIF: GTC"
+                          - generic: "Quantity: 0.010 BTC"
+                          - generic: "Price: 114537.3 USDT"
+                          - generic: "Instrument Type: Swap"
+                  - generic [ref=e448]:
+                    - row "SOnccJ22cC 594...060 In Progress 594...060 Market BTC-USDT Swap 2025-10-28 11:17:19 Buy -- -- -- 1 Contract 0 USDT 0 USDT 0% Cancel" [ref=e449]:
+                      - cell [ref=e450]:
+                        - button [ref=e453] [cursor=pointer]:
+                          - img [ref=e455]
+                      - cell "SOnccJ22cC" [ref=e465]:
+                        - paragraph [ref=e468]: SOnccJ22cC
+                      - cell "594...060" [ref=e469]:
+                        - generic [ref=e472]:
+                          - generic [ref=e473]: 594...060
+                          - img [ref=e474]
+                      - cell "In Progress 594...060" [ref=e477]:
+                        - generic [ref=e479]:
+                          - paragraph [ref=e480]: In Progress
+                          - generic [ref=e481]:
+                            - generic [ref=e482]: 594...060
+                            - img [ref=e483]
+                      - cell "Market" [ref=e486]:
+                        - generic [ref=e488]: Market
+                      - cell "BTC-USDT Swap" [ref=e489]:
+                        - generic [ref=e491]:
+                          - paragraph [ref=e492]: BTC-USDT
+                          - paragraph [ref=e493]: Swap
+                      - cell "2025-10-28 11:17:19" [ref=e494]:
+                        - generic [ref=e496]:
+                          - paragraph [ref=e497]: 2025-10-28
+                          - paragraph [ref=e498]: 11:17:19
+                      - cell "Buy" [ref=e499]:
+                        - generic [ref=e502]: Buy
+                      - cell "-- --" [ref=e503]:
+                        - generic [ref=e506]:
+                          - paragraph [ref=e507]: "--"
+                          - paragraph [ref=e508]: "--"
+                      - cell "-- 1 Contract" [ref=e509]:
+                        - generic [ref=e512]:
+                          - paragraph [ref=e513]: "--"
+                          - paragraph [ref=e514]: 1 Contract
+                      - cell "0 USDT 0 USDT" [ref=e515]:
+                        - generic [ref=e518]:
+                          - paragraph [ref=e519]: 0 USDT
+                          - paragraph [ref=e520]: 0 USDT
+                      - cell "0%" [ref=e521]:
+                        - generic [ref=e522]:
+                          - progressbar [ref=e523]
+                          - generic [ref=e525]: 0%
+                      - cell "Cancel" [ref=e526]:
+                        - button "Cancel" [ref=e530] [cursor=pointer]
+                    - 'row "Quantity: 1 BTC Instrument Type: Swap" [ref=e531]':
+                      - 'cell "Quantity: 1 BTC Instrument Type: Swap" [ref=e532]':
+                        - generic [ref=e533]:
+                          - generic: "Quantity: 1 BTC"
+                          - generic: "Instrument Type: Swap"
+                  - generic [ref=e534]:
+                    - row "SOnccJ22cC 231...658 In Progress 231...658 Limit BTC-USDT Swap 2025-10-28 11:17:19 Buy -- 114,629 USDT -- 0.010000 Contracts 0 USDT 1,146.29 USDT 0% Modify Cancel" [ref=e535]:
+                      - cell [ref=e536]:
+                        - button [ref=e539] [cursor=pointer]:
+                          - img [ref=e541]
+                      - cell "SOnccJ22cC" [ref=e551]:
+                        - paragraph [ref=e554]: SOnccJ22cC
+                      - cell "231...658" [ref=e555]:
+                        - generic [ref=e558]:
+                          - generic [ref=e559]: 231...658
+                          - img [ref=e560]
+                      - cell "In Progress 231...658" [ref=e563]:
+                        - generic [ref=e565]:
+                          - paragraph [ref=e566]: In Progress
+                          - generic [ref=e567]:
+                            - generic [ref=e568]: 231...658
+                            - img [ref=e569]
+                      - cell "Limit" [ref=e572]:
+                        - generic [ref=e574]: Limit
+                      - cell "BTC-USDT Swap" [ref=e575]:
+                        - generic [ref=e577]:
+                          - paragraph [ref=e578]: BTC-USDT
+                          - paragraph [ref=e579]: Swap
+                      - cell "2025-10-28 11:17:19" [ref=e580]:
+                        - generic [ref=e582]:
+                          - paragraph [ref=e583]: 2025-10-28
+                          - paragraph [ref=e584]: 11:17:19
+                      - cell "Buy" [ref=e585]:
+                        - generic [ref=e588]: Buy
+                      - cell "-- 114,629 USDT" [ref=e589]:
+                        - generic [ref=e592]:
+                          - paragraph [ref=e593]: "--"
+                          - paragraph [ref=e594]: 114,629 USDT
+                      - cell "-- 0.010000 Contracts" [ref=e595]:
+                        - generic [ref=e598]:
+                          - paragraph [ref=e599]: "--"
+                          - paragraph [ref=e600]: 0.010000 Contracts
+                      - cell "0 USDT 1,146.29 USDT" [ref=e601]:
+                        - generic [ref=e604]:
+                          - paragraph [ref=e605]: 0 USDT
+                          - paragraph [ref=e606]: 1,146.29 USDT
+                      - cell "0%" [ref=e607]:
+                        - generic [ref=e608]:
+                          - progressbar [ref=e609]
+                          - generic [ref=e611]: 0%
+                      - cell "Modify Cancel" [ref=e612]:
+                        - generic [ref=e615]:
+                          - button "Modify" [ref=e616] [cursor=pointer]
+                          - button "Cancel" [ref=e617] [cursor=pointer]
+                    - 'row "TIF: GTC Quantity: 0.010 BTC Price: 114629 USDT Instrument Type: Swap" [ref=e618]':
+                      - 'cell "TIF: GTC Quantity: 0.010 BTC Price: 114629 USDT Instrument Type: Swap" [ref=e619]':
+                        - generic [ref=e620]:
+                          - generic: "TIF: GTC"
+                          - generic: "Quantity: 0.010 BTC"
+                          - generic: "Price: 114629 USDT"
+                          - generic: "Instrument Type: Swap"
+                  - generic [ref=e621]:
+                    - row "SOnccJ22cC 679...001 In Progress 679...001 Limit BTC-USDT Swap 2025-10-28 11:17:19 Buy -- 114,723 USDT -- 1 Contract 0 USDT 114,723 USDT 0% Modify Cancel" [ref=e622]:
+                      - cell [ref=e623]:
+                        - button [ref=e626] [cursor=pointer]:
+                          - img [ref=e628]
+                      - cell "SOnccJ22cC" [ref=e638]:
+                        - paragraph [ref=e641]: SOnccJ22cC
+                      - cell "679...001" [ref=e642]:
+                        - generic [ref=e645]:
+                          - generic [ref=e646]: 679...001
+                          - img [ref=e647]
+                      - cell "In Progress 679...001" [ref=e650]:
+                        - generic [ref=e652]:
+                          - paragraph [ref=e653]: In Progress
+                          - generic [ref=e654]:
+                            - generic [ref=e655]: 679...001
+                            - img [ref=e656]
+                      - cell "Limit" [ref=e659]:
+                        - generic [ref=e661]: Limit
+                      - cell "BTC-USDT Swap" [ref=e662]:
+                        - generic [ref=e664]:
+                          - paragraph [ref=e665]: BTC-USDT
+                          - paragraph [ref=e666]: Swap
+                      - cell "2025-10-28 11:17:19" [ref=e667]:
+                        - generic [ref=e669]:
+                          - paragraph [ref=e670]: 2025-10-28
+                          - paragraph [ref=e671]: 11:17:19
+                      - cell "Buy" [ref=e672]:
+                        - generic [ref=e675]: Buy
+                      - cell "-- 114,723 USDT" [ref=e676]:
+                        - generic [ref=e679]:
+                          - paragraph [ref=e680]: "--"
+                          - paragraph [ref=e681]: 114,723 USDT
+                      - cell "-- 1 Contract" [ref=e682]:
+                        - generic [ref=e685]:
+                          - paragraph [ref=e686]: "--"
+                          - paragraph [ref=e687]: 1 Contract
+                      - cell "0 USDT 114,723 USDT" [ref=e688]:
+                        - generic [ref=e691]:
+                          - paragraph [ref=e692]: 0 USDT
+                          - paragraph [ref=e693]: 114,723 USDT
+                      - cell "0%" [ref=e694]:
+                        - generic [ref=e695]:
+                          - progressbar [ref=e696]
+                          - generic [ref=e698]: 0%
+                      - cell "Modify Cancel" [ref=e699]:
+                        - generic [ref=e702]:
+                          - button "Modify" [ref=e703] [cursor=pointer]
+                          - button "Cancel" [ref=e704] [cursor=pointer]
+                    - 'row "TIF: GTC Quantity: 1 BTC Price: 114722.9 USDT Instrument Type: Swap" [ref=e705]':
+                      - 'cell "TIF: GTC Quantity: 1 BTC Price: 114722.9 USDT Instrument Type: Swap" [ref=e706]':
+                        - generic [ref=e707]:
+                          - generic: "TIF: GTC"
+                          - generic: "Quantity: 1 BTC"
+                          - generic: "Price: 114722.9 USDT"
+                          - generic: "Instrument Type: Swap"
+                  - generic [ref=e708]:
+                    - row "SOnccJ22cC 530...767 In Progress 530...767 Market BTC-USDT_251031 Calendar Futures 2025-10-28 11:17:19 Buy -- -- -- 1 Contract 0 USDT 0 USDT 0% Cancel" [ref=e709]:
+                      - cell [ref=e710]:
+                        - button [ref=e713] [cursor=pointer]:
+                          - img [ref=e715]
+                      - cell "SOnccJ22cC" [ref=e725]:
+                        - paragraph [ref=e728]: SOnccJ22cC
+                      - cell "530...767" [ref=e729]:
+                        - generic [ref=e732]:
+                          - generic [ref=e733]: 530...767
+                          - img [ref=e734]
+                      - cell "In Progress 530...767" [ref=e737]:
+                        - generic [ref=e739]:
+                          - paragraph [ref=e740]: In Progress
+                          - generic [ref=e741]:
+                            - generic [ref=e742]: 530...767
+                            - img [ref=e743]
+                      - cell "Market" [ref=e746]:
+                        - generic [ref=e748]: Market
+                      - cell "BTC-USDT_251031 Calendar Futures" [ref=e749]:
+                        - generic [ref=e751]:
+                          - paragraph [ref=e752]: BTC-USDT_251031
+                          - paragraph [ref=e753]: Calendar Futures
+                      - cell "2025-10-28 11:17:19" [ref=e754]:
+                        - generic [ref=e756]:
+                          - paragraph [ref=e757]: 2025-10-28
+                          - paragraph [ref=e758]: 11:17:19
+                      - cell "Buy" [ref=e759]:
+                        - generic [ref=e762]: Buy
+                      - cell "-- --" [ref=e763]:
+                        - generic [ref=e766]:
+                          - paragraph [ref=e767]: "--"
+                          - paragraph [ref=e768]: "--"
+                      - cell "-- 1 Contract" [ref=e769]:
+                        - generic [ref=e772]:
+                          - paragraph [ref=e773]: "--"
+                          - paragraph [ref=e774]: 1 Contract
+                      - cell "0 USDT 0 USDT" [ref=e775]:
+                        - generic [ref=e778]:
+                          - paragraph [ref=e779]: 0 USDT
+                          - paragraph [ref=e780]: 0 USDT
+                      - cell "0%" [ref=e781]:
+                        - generic [ref=e782]:
+                          - progressbar [ref=e783]
+                          - generic [ref=e785]: 0%
+                      - cell "Cancel" [ref=e786]:
+                        - button "Cancel" [ref=e790] [cursor=pointer]
+                    - 'row "Quantity: 1 BTC Instrument Type: Calendar Futures" [ref=e791]':
+                      - 'cell "Quantity: 1 BTC Instrument Type: Calendar Futures" [ref=e792]':
+                        - generic [ref=e793]:
+                          - generic: "Quantity: 1 BTC"
+                          - generic: "Instrument Type: Calendar Futures"
+                  - generic [ref=e794]:
+                    - row "SOnccJ22cC 108...801 Cancelled 108...801 Limit Edge BTC-USDT_251031 Calendar Futures 2025-10-28 10:07:24 Buy -- -- -- 1 Contract 0 USDT 0 USDT 0%" [ref=e795]:
+                      - cell [ref=e796]:
+                        - button [ref=e799] [cursor=pointer]:
+                          - img [ref=e801]
+                      - cell "SOnccJ22cC" [ref=e811]:
+                        - paragraph [ref=e814]: SOnccJ22cC
+                      - cell "108...801" [ref=e815]:
+                        - generic [ref=e818]:
+                          - generic [ref=e819]: 108...801
+                          - img [ref=e820]
+                      - cell "Cancelled 108...801" [ref=e823]:
+                        - generic [ref=e825]:
+                          - paragraph [ref=e826]: Cancelled
+                          - generic [ref=e827]:
+                            - generic [ref=e828]: 108...801
+                            - img [ref=e829]
+                      - cell "Limit Edge" [ref=e832]:
+                        - generic [ref=e834]: Limit Edge
+                      - cell "BTC-USDT_251031 Calendar Futures" [ref=e835]:
+                        - generic [ref=e837]:
+                          - paragraph [ref=e838]: BTC-USDT_251031
+                          - paragraph [ref=e839]: Calendar Futures
+                      - cell "2025-10-28 10:07:24" [ref=e840]:
+                        - generic [ref=e842]:
+                          - paragraph [ref=e843]: 2025-10-28
+                          - paragraph [ref=e844]: 10:07:24
+                      - cell "Buy" [ref=e845]:
+                        - generic [ref=e848]: Buy
+                      - cell "-- --" [ref=e849]:
+                        - generic [ref=e852]:
+                          - paragraph [ref=e853]: "--"
+                          - paragraph [ref=e854]: "--"
+                      - cell "-- 1 Contract" [ref=e855]:
+                        - generic [ref=e858]:
+                          - paragraph [ref=e859]: "--"
+                          - paragraph [ref=e860]: 1 Contract
+                      - cell "0 USDT 0 USDT" [ref=e861]:
+                        - generic [ref=e864]:
+                          - paragraph [ref=e865]: 0 USDT
+                          - paragraph [ref=e866]: 0 USDT
+                      - cell "0%" [ref=e867]:
+                        - generic [ref=e868]:
+                          - progressbar [ref=e869]
+                          - generic [ref=e871]: 0%
+                      - cell [ref=e872]
+                    - 'row "Duration: 2s Quantity: 1 BTC Instrument Type: Calendar Futures" [ref=e873]':
+                      - 'cell "Duration: 2s Quantity: 1 BTC Instrument Type: Calendar Futures" [ref=e874]':
+                        - generic [ref=e875]:
+                          - generic: "Duration: 2s"
+                          - generic: "Quantity: 1 BTC"
+                          - generic: "Instrument Type: Calendar Futures"
+                  - generic [ref=e876]:
+                    - row "SOnccJ22cC 109...736 Cancelled 109...736 Limit BTC-USDT Swap 2025-10-27 16:00:49 Buy -- -- -- 0.010000 Contracts 0 USDT 0 USDT 0%" [ref=e877]:
+                      - cell [ref=e878]:
+                        - button [ref=e881] [cursor=pointer]:
+                          - img [ref=e883]
+                      - cell "SOnccJ22cC" [ref=e893]:
+                        - paragraph [ref=e896]: SOnccJ22cC
+                      - cell "109...736" [ref=e897]:
+                        - generic [ref=e900]:
+                          - generic [ref=e901]: 109...736
+                          - img [ref=e902]
+                      - cell "Cancelled 109...736" [ref=e905]:
+                        - generic [ref=e907]:
+                          - paragraph [ref=e908]: Cancelled
+                          - generic [ref=e909]:
+                            - generic [ref=e910]: 109...736
+                            - img [ref=e911]
+                      - cell "Limit" [ref=e914]:
+                        - generic [ref=e916]: Limit
+                      - cell "BTC-USDT Swap" [ref=e917]:
+                        - generic [ref=e919]:
+                          - paragraph [ref=e920]: BTC-USDT
+                          - paragraph [ref=e921]: Swap
+                      - cell "2025-10-27 16:00:49" [ref=e922]:
+                        - generic [ref=e924]:
+                          - paragraph [ref=e925]: 2025-10-27
+                          - paragraph [ref=e926]: 16:00:49
+                      - cell "Buy" [ref=e927]:
+                        - generic [ref=e930]: Buy
+                      - cell "-- --" [ref=e931]:
+                        - generic [ref=e934]:
+                          - paragraph [ref=e935]: "--"
+                          - paragraph [ref=e936]: "--"
+                      - cell "-- 0.010000 Contracts" [ref=e937]:
+                        - generic [ref=e940]:
+                          - paragraph [ref=e941]: "--"
+                          - paragraph [ref=e942]: 0.010000 Contracts
+                      - cell "0 USDT 0 USDT" [ref=e943]:
+                        - generic [ref=e946]:
+                          - paragraph [ref=e947]: 0 USDT
+                          - paragraph [ref=e948]: 0 USDT
+                      - cell "0%" [ref=e949]:
+                        - generic [ref=e950]:
+                          - progressbar [ref=e951]
+                          - generic [ref=e953]: 0%
+                      - cell [ref=e954]
+                    - 'row "TIF: GTC Quantity: 0.010 BTC Price: 114834.4 USDT Instrument Type: Swap" [ref=e955]':
+                      - 'cell "TIF: GTC Quantity: 0.010 BTC Price: 114834.4 USDT Instrument Type: Swap" [ref=e956]':
+                        - generic [ref=e957]:
+                          - generic: "TIF: GTC"
+                          - generic: "Quantity: 0.010 BTC"
+                          - generic: "Price: 114834.4 USDT"
+                          - generic: "Instrument Type: Swap"
+                  - generic [ref=e958]:
+                    - row "SOnccJ22cC 716...398 Cancelled 716...398 Limit BTC-USDT Spot 2025-10-27 14:50:33 Buy -- -- -- 0.010000 BTC 0 USDT 0 USDT 0%" [ref=e959]:
+                      - cell [ref=e960]:
+                        - button [ref=e963] [cursor=pointer]:
+                          - img [ref=e965]
+                      - cell "SOnccJ22cC" [ref=e975]:
+                        - paragraph [ref=e978]: SOnccJ22cC
+                      - cell "716...398" [ref=e979]:
+                        - generic [ref=e982]:
+                          - generic [ref=e983]: 716...398
+                          - img [ref=e984]
+                      - cell "Cancelled 716...398" [ref=e987]:
+                        - generic [ref=e989]:
+                          - paragraph [ref=e990]: Cancelled
+                          - generic [ref=e991]:
+                            - generic [ref=e992]: 716...398
+                            - img [ref=e993]
+                      - cell "Limit" [ref=e996]:
+                        - generic [ref=e998]: Limit
+                      - cell "BTC-USDT Spot" [ref=e999]:
+                        - generic [ref=e1001]:
+                          - paragraph [ref=e1002]: BTC-USDT
+                          - paragraph [ref=e1003]: Spot
+                      - cell "2025-10-27 14:50:33" [ref=e1004]:
+                        - generic [ref=e1006]:
+                          - paragraph [ref=e1007]: 2025-10-27
+                          - paragraph [ref=e1008]: 14:50:33
+                      - cell "Buy" [ref=e1009]:
+                        - generic [ref=e1012]: Buy
+                      - cell "-- --" [ref=e1013]:
+                        - generic [ref=e1016]:
+                          - paragraph [ref=e1017]: "--"
+                          - paragraph [ref=e1018]: "--"
+                      - cell "-- 0.010000 BTC" [ref=e1019]:
+                        - generic [ref=e1022]:
+                          - paragraph [ref=e1023]: "--"
+                          - paragraph [ref=e1024]: 0.010000 BTC
+                      - cell "0 USDT 0 USDT" [ref=e1025]:
+                        - generic [ref=e1028]:
+                          - paragraph [ref=e1029]: 0 USDT
+                          - paragraph [ref=e1030]: 0 USDT
+                      - cell "0%" [ref=e1031]:
+                        - generic [ref=e1032]:
+                          - progressbar [ref=e1033]
+                          - generic [ref=e1035]: 0%
+                      - cell [ref=e1036]
+                    - 'row "TIF: GTC Quantity: 0.010 BTC Price: 114825.5 USDT Instrument Type: Spot" [ref=e1037]':
+                      - 'cell "TIF: GTC Quantity: 0.010 BTC Price: 114825.5 USDT Instrument Type: Spot" [ref=e1038]':
+                        - generic [ref=e1039]:
+                          - generic: "TIF: GTC"
+                          - generic: "Quantity: 0.010 BTC"
+                          - generic: "Price: 114825.5 USDT"
+                          - generic: "Instrument Type: Spot"
+                  - generic [ref=e1040]:
+                    - row "SOnccJ22cC 466...767 In Progress 466...767 Limit BTC-USDT_251031 2025-10-27 14:48:45 Buy -- -922,337,000,000,000,000 -- NaN 0 NaN 0% Modify Cancel" [ref=e1041]:
+                      - cell [ref=e1042]:
+                        - button [ref=e1045] [cursor=pointer]:
+                          - img [ref=e1047]
+                      - cell "SOnccJ22cC" [ref=e1057]:
+                        - paragraph [ref=e1060]: SOnccJ22cC
+                      - cell "466...767" [ref=e1061]:
+                        - generic [ref=e1064]:
+                          - generic [ref=e1065]: 466...767
+                          - img [ref=e1066]
+                      - cell "In Progress 466...767" [ref=e1069]:
+                        - generic [ref=e1071]:
+                          - paragraph [ref=e1072]: In Progress
+                          - generic [ref=e1073]:
+                            - generic [ref=e1074]: 466...767
+                            - img [ref=e1075]
+                      - cell "Limit" [ref=e1078]:
+                        - generic [ref=e1080]: Limit
+                      - cell "BTC-USDT_251031" [ref=e1081]:
+                        - generic [ref=e1083]:
+                          - paragraph [ref=e1084]: BTC-USDT_251031
+                          - paragraph
+                      - cell "2025-10-27 14:48:45" [ref=e1085]:
+                        - generic [ref=e1087]:
+                          - paragraph [ref=e1088]: 2025-10-27
+                          - paragraph [ref=e1089]: 14:48:45
+                      - cell "Buy" [ref=e1090]:
+                        - generic [ref=e1093]: Buy
+                      - cell "-- -922,337,000,000,000,000" [ref=e1094]:
+                        - generic [ref=e1097]:
+                          - paragraph [ref=e1098]: "--"
+                          - paragraph [ref=e1099]: "-922,337,000,000,000,000"
+                      - cell "-- NaN" [ref=e1100]:
+                        - generic [ref=e1103]:
+                          - paragraph [ref=e1104]: "--"
+                          - paragraph [ref=e1105]: NaN
+                      - cell "0 NaN" [ref=e1106]:
+                        - generic [ref=e1109]:
+                          - paragraph [ref=e1110]: "0"
+                          - paragraph [ref=e1111]: NaN
+                      - cell "0%" [ref=e1112]:
+                        - generic [ref=e1113]:
+                          - progressbar [ref=e1114]
+                          - generic [ref=e1116]: 0%
+                      - cell "Modify Cancel" [ref=e1117]:
+                        - generic [ref=e1120]:
+                          - button "Modify" [ref=e1121] [cursor=pointer]
+                          - button "Cancel" [ref=e1122] [cursor=pointer]
+                    - 'row "TIF: GTC Quantity: NaN Price: 114865.7" [ref=e1123]':
+                      - 'cell "TIF: GTC Quantity: NaN Price: 114865.7" [ref=e1124]':
+                        - generic [ref=e1125]:
+                          - generic: "TIF: GTC"
+                          - generic: "Quantity: NaN"
+                          - generic: "Price: 114865.7"
+                  - generic [ref=e1126]:
+                    - row "SOnccJ22cC 242...205 In Progress 242...205 Limit BTC-USDT 2025-10-27 14:47:35 Buy -- -922,337,000,000,000,000 -- NaN 0 NaN 0% Modify Cancel" [ref=e1127]:
+                      - cell [ref=e1128]:
+                        - button [ref=e1131] [cursor=pointer]:
+                          - img [ref=e1133]
+                      - cell "SOnccJ22cC" [ref=e1143]:
+                        - paragraph [ref=e1146]: SOnccJ22cC
+                      - cell "242...205" [ref=e1147]:
+                        - generic [ref=e1150]:
+                          - generic [ref=e1151]: 242...205
+                          - img [ref=e1152]
+                      - cell "In Progress 242...205" [ref=e1155]:
+                        - generic [ref=e1157]:
+                          - paragraph [ref=e1158]: In Progress
+                          - generic [ref=e1159]:
+                            - generic [ref=e1160]: 242...205
+                            - img [ref=e1161]
+                      - cell "Limit" [ref=e1164]:
+                        - generic [ref=e1166]: Limit
+                      - cell "BTC-USDT" [ref=e1167]:
+                        - generic [ref=e1169]:
+                          - paragraph [ref=e1170]: BTC-USDT
+                          - paragraph
+                      - cell "2025-10-27 14:47:35" [ref=e1171]:
+                        - generic [ref=e1173]:
+                          - paragraph [ref=e1174]: 2025-10-27
+                          - paragraph [ref=e1175]: 14:47:35
+                      - cell "Buy" [ref=e1176]:
+                        - generic [ref=e1179]: Buy
+                      - cell "-- -922,337,000,000,000,000" [ref=e1180]:
+                        - generic [ref=e1183]:
+                          - paragraph [ref=e1184]: "--"
+                          - paragraph [ref=e1185]: "-922,337,000,000,000,000"
+                      - cell "-- NaN" [ref=e1186]:
+                        - generic [ref=e1189]:
+                          - paragraph [ref=e1190]: "--"
+                          - paragraph [ref=e1191]: NaN
+                      - cell "0 NaN" [ref=e1192]:
+                        - generic [ref=e1195]:
+                          - paragraph [ref=e1196]: "0"
+                          - paragraph [ref=e1197]: NaN
+                      - cell "0%" [ref=e1198]:
+                        - generic [ref=e1199]:
+                          - progressbar [ref=e1200]
+                          - generic [ref=e1202]: 0%
+                      - cell "Modify Cancel" [ref=e1203]:
+                        - generic [ref=e1206]:
+                          - button "Modify" [ref=e1207] [cursor=pointer]
+                          - button "Cancel" [ref=e1208] [cursor=pointer]
+                    - 'row "TIF: GTC Quantity: NaN Price: 114833.2" [ref=e1209]':
+                      - 'cell "TIF: GTC Quantity: NaN Price: 114833.2" [ref=e1210]':
+                        - generic [ref=e1211]:
+                          - generic: "TIF: GTC"
+                          - generic: "Quantity: NaN"
+                          - generic: "Price: 114833.2"
+              - generic [ref=e1212]:
+                - button [disabled]:
+                  - img
+                - paragraph [ref=e1213]: 1 of 25
+                - button [ref=e1214] [cursor=pointer]:
+                  - img [ref=e1215]
+    - region "Notifications alt+T"
+  - alert [ref=e1217]
+```
