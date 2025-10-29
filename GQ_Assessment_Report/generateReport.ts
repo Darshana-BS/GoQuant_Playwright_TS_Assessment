@@ -353,10 +353,9 @@ ${credentials}
 ## 14. 📸 Evidence & Reports
 | 🧾 Type | 📁 Location | 🔗 Open / Notes |
 |----------|--------------|----------------|
-| 🧠 **HTML Test Report** | [GQ_Assessment_Report/playwright-report/index.html](./GQ_Assessment_Report/playwright-report/index.html) | ▶️ *View full Playwright test results* |
+| 🧠 **HTML Test Report** | [GoQuant_Playwright_TS_Assessment/](https://darshana-bs.github.io/GoQuant_Playwright_TS_Assessment/) | ▶️ *View full Playwright test results* |
 | 🧠 **PDF Test Report | [GQ_Assessment_Report/GQ_Assessment_Report/Detailed_Report.md](https://github.com/Darshana-BS/GQ_Assessment/blob/GQ_Assessment/GQ_Assessment_Report/GQ_Assessment_Report/Detailed_Report.md) | 🪄 *Backup local report location* |
 | 🧩 **Trace Files** | [tests/trace/Restructured_cases](https://github.com/Darshana-BS/GQ_Assessment/tree/GQ_Assessment/tests/trace/Restructured_cases) | 🔍 *Replay test steps in Playwright trace viewer* |
-| 🖼️ **Screenshots** | [reports/screenshots/](./reports/screenshots/) | 📸 *Pending upload / captured test images* | [Pending]
 ------------------------------------------------------------------------------ 
 
 ## 15. 🧩 Test Organization
